@@ -21,7 +21,7 @@ router.use((err, req, res, next) => {
 });
 
 router.use("*", (req, res) => {
-  res.json({ message: "404 Not found" });
+  res.json({ message: "404 Not found", success: false });
 });
 
 export default router;

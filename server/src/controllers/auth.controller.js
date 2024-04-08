@@ -1,6 +1,7 @@
 import db from "../config/db.js";
 import { errorHandler } from "../utils/error.js";
 import bcryptjs from "bcryptjs";
+
 export async function studentSignUpController(req, res, next) {
   const {
     fullName,
@@ -16,7 +17,6 @@ export async function studentSignUpController(req, res, next) {
     year,
     password,
   } = req.body;
-  console.log(req.body);
   const hashedPassword = bcryptjs.hashSync(password, 10);
   try {
     const response = await db.query(
@@ -36,22 +36,22 @@ export async function studentSignUpController(req, res, next) {
         hashedPassword,
       ]
     );
-    console.log("hi");
     res
       .status(201)
       .json({ success: true, message: "User created successfully" });
   } catch (error) {
-    console.log(error);
     if (
       error?.detail?.includes("already exists") &&
       error?.detail?.includes("rollno")
     )
-      next(errorHandler(409, "Roll Number already exists. Please Login!"));
+      return next(
+        errorHandler(409, "Roll Number already exists. Please Login!")
+      );
     if (
       error?.detail?.includes("already exists") &&
       error?.detail?.includes("email")
     )
-      next(
+      return next(
         errorHandler(
           409,
           "Email already exists. Please use another email or login!"
@@ -61,19 +61,42 @@ export async function studentSignUpController(req, res, next) {
       error?.detail?.includes("already exists") &&
       error?.detail?.includes("mobile")
     )
-      next(
+      return next(
         errorHandler(
           409,
-          "Mobile Number already exists. Please use another number or login!!"
+          "Mobile Number already exists. Please use another number or login!"
         )
       );
     next(error);
   }
 }
 
-export function studentSignInController(req, res) {
+export function staffSignInController(req, res) {
   console.log(req.body);
   res.send("User trying to sign in");
 }
 
-export function staffSignInController(req, res) {}
+export async function studentSignInController(req, res, next) {
+  console.log(req.body);
+  const token = req.cookies.access_token;
+  console.log(token);
+  const { rollno, password } = req.body;
+  try {
+    const response = await db.query("SELECT * FROM students WHERE rollno=$1", [
+      rollno,
+    ]);
+    if (!response.rowCount) {
+      return next(errorHandler(404, "Student not found!"));
+    } else {
+      const validPwd = bcryptjs.compareSync(
+        password,
+        response.rows[0].password
+      );
+      if (!validPwd) return next(errorHandler(401, "Wrong password!"));
+      const { password: hashedPassword, ...data } = response.rows[0];
+      res.status(200).json({ ...data, success: true });
+    }
+  } catch (error) {
+    next(error);
+  }
+}

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import PageNav from "../components/PageNav";
 import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   faCircleInfo,
@@ -11,10 +11,10 @@ import {
   faCircleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 
-const VITE_BASE_URL = "http://localhost:5000/api";
+const { VITE_BASE_URL } = import.meta.env;
 const EMAIL_REGEX = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
-const PWD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
 const MOB_REGEX = /^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$/;
+const PWD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
 const RNO_REGEX = /^20[\d]{8}$/;
 
 function StudentResgister() {
@@ -144,7 +144,8 @@ function StudentResgister() {
         setErrMsg(response.data.message);
       }
     } catch (error) {
-      setErrMsg("Something went wrong. Please try again");
+      if (error.response.data.message) setErrMsg(error.response.data.message);
+      else setErrMsg("Something went wrong! Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -204,7 +205,7 @@ function StudentResgister() {
           ease: "backInOut",
         }}
         exit={{
-          y: "1000px",
+          y: "-1000px",
         }}
         onSubmit={handleSubmit}
         className="flex flex-col p-8 max-w-lg mx-auto break-all gap-4 rounded-3xl border-2 border-[#ffffff80] border-r-[#ffffff33] border-b-[#ffffff33] backdrop-blur-lg bg-white/[0.2] shadow-[3px_3px_5px_#ffffff0f] w-[90%] "
@@ -529,6 +530,12 @@ function StudentResgister() {
         >
           {isLoading ? "Signing up..." : "Sign up"}
         </button>
+        <p>
+          <span className="text-white">Already registed ? </span>
+          <Link to="/student/signin">
+            <span className="text-emerald-400">Sign in</span>
+          </Link>
+        </p>
       </motion.form>
     </section>
   );

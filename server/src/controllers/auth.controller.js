@@ -1,6 +1,7 @@
 import db from "../config/db.js";
 import { errorHandler } from "../utils/error.js";
 import bcryptjs from "bcryptjs";
+import { createJWT } from "../utils/jwt.js";
 
 export async function studentSignUpController(req, res, next) {
   const {
@@ -78,7 +79,7 @@ export function staffSignInController(req, res) {
 
 export async function studentSignInController(req, res, next) {
   console.log(req.body);
-  const token = req.cookies.access_token;
+  const token = req.cookies?.token;
   console.log(token);
   const { rollno, password } = req.body;
   try {
@@ -94,6 +95,15 @@ export async function studentSignInController(req, res, next) {
       );
       if (!validPwd) return next(errorHandler(401, "Wrong password!"));
       const { password: hashedPassword, ...data } = response.rows[0];
+      const token = createJWT(data);
+      const expiryDate = new Date(Date.now()) + 1 * 86400 * 1000;
+      res.cookie("accessToken", token, {
+        httpOnly: true,
+        // expires: expiryDate,
+        sameSite: "None",
+        secure: false,
+      });
+      console.log(token);
       res.status(200).json({ ...data, success: true });
     }
   } catch (error) {

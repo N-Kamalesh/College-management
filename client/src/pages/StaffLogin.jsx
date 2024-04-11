@@ -1,3 +1,4 @@
+import Footer from "../components/Footer";
 import PageNav from "../components/PageNav";
 
 function StaffLogin() {
@@ -5,6 +6,7 @@ function StaffLogin() {
     <>
       <PageNav />
       <form>Hello</form>
+      <Footer />
     </>
   );
 }

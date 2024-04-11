@@ -6,6 +6,7 @@ export default {
       backgroundImage: {
         ball: "url(/images/auth-bg.jpg)",
         blue: "url(/images/register-bg.jpg)",
+        circ: "url(/images/circle.jpg)",
       },
     },
   },

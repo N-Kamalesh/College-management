@@ -10,6 +10,7 @@ import {
   faTimes,
   faCircleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
+import Footer from "../components/Footer";
 
 const { VITE_BASE_URL } = import.meta.env;
 const EMAIL_REGEX = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
@@ -152,7 +153,7 @@ function StudentResgister() {
   }
 
   return (
-    <section className="min-h-screen bg-cover bg-blue bg-top h-full pb-6">
+    <main className="min-h-screen bg-cover bg-blue bg-top h-full flex flex-col">
       <PageNav />
       <motion.h1
         initial={{
@@ -208,7 +209,7 @@ function StudentResgister() {
           y: "-1000px",
         }}
         onSubmit={handleSubmit}
-        className="flex flex-col p-8 max-w-lg mx-auto break-all gap-4 rounded-3xl border-2 border-[#ffffff80] border-r-[#ffffff33] border-b-[#ffffff33] backdrop-blur-lg bg-white/[0.2] shadow-[3px_3px_5px_#ffffff0f] w-[90%] "
+        className="flex flex-col p-8 max-w-lg mx-auto break-all gap-4 rounded-3xl border-2 border-[#ffffff80] border-r-[#ffffff33] border-b-[#ffffff33] backdrop-blur-lg bg-white/[0.2] shadow-[3px_3px_5px_#ffffff0f] w-[90%] mb-10"
       >
         {/* Full Name */}
         <input
@@ -537,7 +538,8 @@ function StudentResgister() {
           </Link>
         </p>
       </motion.form>
-    </section>
+      <Footer />
+    </main>
   );
 }
 

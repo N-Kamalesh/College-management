@@ -7,13 +7,13 @@ function PageNav() {
         <h1 className="font-bold">College DB</h1>
         <ul className="flex gap-4 sm:gap-8">
           <NavLink to="/student/signup">
-            <li>Student</li>
+            <li className="relative">Student</li>
           </NavLink>
           <NavLink to="/staff/signin">
-            <li>Staff</li>
+            <li className="relative">Staff</li>
           </NavLink>
-          <NavLink to="/about">
-            <li>About</li>
+          <NavLink to="/contact">
+            <li className="relative">Contact</li>
           </NavLink>
         </ul>
       </nav>

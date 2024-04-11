@@ -6,3 +6,12 @@
 * {
   font-family: "Poppins", sans-serif;
 }
+nav .active {
+  text-decoration: underline;
+  text-decoration-color: rgb(0, 255, 76);
+  text-underline-offset: 8px;
+}
+
+.leaflet-container {
+  border-radius: 22px;
+}

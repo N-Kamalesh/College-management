@@ -1,10 +1,11 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PageNav from "../components/PageNav";
 import { motion, AnimatePresence } from "framer-motion";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Footer from "../components/Footer";
 
 const { VITE_BASE_URL } = import.meta.env;
 const PWD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
@@ -46,7 +47,10 @@ function StudentLogin() {
       setIsLoading(true);
       const response = await axios.post(
         `${VITE_BASE_URL}/auth/student/signin`,
-        formData
+        formData,
+        {
+          withCredentials: true,
+        }
       );
       console.log(response.data);
       if (response.data.success) {
@@ -65,7 +69,7 @@ function StudentLogin() {
   }
 
   return (
-    <section className="min-h-screen bg-cover bg-blue bg-top h-full pb-6">
+    <main className="min-h-screen bg-cover bg-blue bg-top h-full  flex flex-col ">
       <PageNav />
       <motion.h1
         initial={{
@@ -159,7 +163,8 @@ function StudentLogin() {
           </Link>
         </p>
       </motion.form>
-    </section>
+      <Footer />
+    </main>
   );
 }
 

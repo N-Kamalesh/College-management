@@ -8,6 +8,9 @@ export default {
         blue: "url(/images/register-bg.jpg)",
         circ: "url(/images/circle.jpg)",
       },
+      fontFamily: {
+        cursive: ["Kalam", "cursive"],
+      },
     },
   },
   plugins: [],

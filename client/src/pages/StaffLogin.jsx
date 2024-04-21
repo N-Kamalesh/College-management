@@ -1,13 +1,224 @@
+import { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import PageNav from "../components/PageNav";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCircleExclamation,
+  faRepeat,
+} from "@fortawesome/free-solid-svg-icons";
+import { staffLoginSuccess } from "../redux/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import cryptoRandomString from "crypto-random-string";
+import axios from "axios";
 
+const { VITE_BASE_URL } = import.meta.env;
+const PWD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+const STAFFID_REGEX = /^2[\d]{3}$/;
 function StaffLogin() {
+  const navigate = useNavigate();
+  const [captcha, setCaptcha] = useState(() =>
+    cryptoRandomString({ length: 6, type: "base64" })
+  );
+  const [matchCaptcha, setMatchCaptcha] = useState("");
+  const [staffId, setStaffId] = useState("");
+  const [password, setPassword] = useState("");
+  const [errMsg, setErrMsg] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const { isAuthenticated, role } = useSelector((state) => state.user);
+
+  useEffect(
+    function () {
+      if (isAuthenticated) {
+        if (role === "staff") navigate("/staff/app", { replace: true });
+        else navigate("/staff/app", { replace: true });
+      }
+    },
+    [isAuthenticated, navigate, role]
+  );
+
+  useEffect(
+    function () {
+      setErrMsg("");
+    },
+    [password, staffId, matchCaptcha]
+  );
+
+  function changeCaptcha() {
+    setCaptcha(cryptoRandomString({ length: 6, type: "base64" }));
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    console.log("Form submitted");
+    setErrMsg("");
+    if (!password.trim() || !staffId.trim()) {
+      setErrMsg("Please fill all fields!");
+      return;
+    }
+    const validRollno = STAFFID_REGEX.test(staffId);
+    if (!validRollno) {
+      setErrMsg("Please enter valid staff id");
+      return;
+    }
+    const validPassword = PWD_REGEX.test(password);
+    if (!validPassword) {
+      setErrMsg("Please enter valid password");
+      return;
+    }
+
+    if (captcha !== matchCaptcha) {
+      setErrMsg("Please enter captcha correctly");
+      changeCaptcha();
+      return;
+    }
+    const formData = { staffId, password };
+    try {
+      setIsLoading(true);
+      const response = await axios.post(
+        `${VITE_BASE_URL}/auth/staff/signin`,
+        formData,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(response.data);
+      if (response.data.success) {
+        dispatch(staffLoginSuccess(response.data.data, response.data.isHod));
+        navigate("/");
+        console.log("Success");
+      } else {
+        setErrMsg(response.data.message);
+        changeCaptcha();
+      }
+    } catch (error) {
+      changeCaptcha();
+      if (error?.response?.data?.message)
+        setErrMsg(error?.response?.data?.message);
+      else setErrMsg("Something went wrong! Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
-    <>
+    <main className="min-h-screen bg-cover bg-blue bg-top h-full  flex flex-col ">
       <PageNav />
-      <form>Hello</form>
+      <motion.h1
+        initial={{
+          x: "1000px",
+        }}
+        animate={{
+          x: 0,
+        }}
+        transition={{
+          duration: 1.5,
+          ease: "backInOut",
+        }}
+        className="text-3xl text-center my-6 font-semibold text-white animate-pulse"
+      >
+        Staff Login
+      </motion.h1>
+      <AnimatePresence>
+        {errMsg && (
+          <motion.p
+            initial={{
+              scale: 0,
+            }}
+            animate={{ scale: 1 }}
+            transition={{
+              duration: 1,
+              ease: "backInOut",
+            }}
+            exit={{
+              scale: 0,
+            }}
+            className="bg-red-500 font-sans text-white rounded-xl p-4 max-w-lg w-[90%] mx-auto mb-2"
+          >
+            <FontAwesomeIcon
+              icon={faCircleExclamation}
+              style={{ color: "white" }}
+            />{" "}
+            {errMsg}
+          </motion.p>
+        )}
+      </AnimatePresence>
+      <motion.form
+        initial={{
+          y: "-1000px",
+        }}
+        animate={{
+          y: 0,
+        }}
+        transition={{
+          duration: 1.5,
+          ease: "backInOut",
+        }}
+        exit={{
+          y: "1000px",
+        }}
+        onSubmit={handleSubmit}
+        className="flex flex-col p-8 max-w-lg mx-auto break-all gap-4 rounded-3xl border-2 border-[#ffffff80] border-r-[#ffffff33] border-b-[#ffffff33] backdrop-blur-lg bg-white/[0.2] shadow-[3px_3px_5px_#ffffff0f] w-[90%] "
+      >
+        <input
+          className="w-full mx-auto py-2 px-4 rounded-3xl bg-transparent border border-[#ffffff80] border-r-[#ffffff33] border-b-[#ffffff33] focus:border focus:shadow-[0_5px_15px_#ffffff33] focus:outline-none text-white placeholder:text-white/[0.75]"
+          type="text"
+          name="staffId"
+          placeholder="Staff ID"
+          required
+          autoComplete="off"
+          value={staffId}
+          onChange={(e) => setStaffId(e.target.value)}
+        />
+        <input
+          className="w-full mx-auto py-2 px-4 rounded-3xl bg-transparent border border-[#ffffff80] border-r-[#ffffff33] border-b-[#ffffff33] focus:border focus:shadow-[0_5px_15px_#ffffff33] focus:outline-none text-white placeholder:text-white/[0.75]"
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <div className="w-full mx-auto py-2 px-4 rounded-3xl bg-transparent border border-[#ffffff80] border-r-[#ffffff33] border-b-[#ffffff33] focus:border focus:shadow-[0_5px_15px_#ffffff33] focus:outline-none text-white placeholder:text-white/[0.75]  text-center  tracking-widest text-xl relative">
+          <p className="cursor-not-allowed unselectable font-cursive line-through">
+            {captcha}
+          </p>
+          <span
+            className="absolute right-4 top-2 cursor-pointer"
+            onClick={changeCaptcha}
+          >
+            <FontAwesomeIcon icon={faRepeat} />
+          </span>
+        </div>
+        <input
+          className="w-full mx-auto py-2 px-4 rounded-3xl bg-transparent border border-[#ffffff80] border-r-[#ffffff33] border-b-[#ffffff33] focus:border focus:shadow-[0_5px_15px_#ffffff33] focus:outline-none text-white placeholder:text-white/[0.75]"
+          type="text"
+          name="captcha"
+          placeholder="Enter the CAPTCHA"
+          required
+          value={matchCaptcha}
+          onChange={(e) => setMatchCaptcha(e.target.value)}
+        />
+        <button
+          disabled={
+            !staffId.trim() ||
+            !password.trim() ||
+            !matchCaptcha.trim() ||
+            isLoading
+              ? true
+              : false
+          }
+          type="submit"
+          className="
+        rounded-3xl disabled:cursor-not-allowed bg-white/[0.7] px-4 py-2 disabled:bg-slate-500/[0.5] border-2 border-[#ffffff80] border-r-[#ffffff33] border-b-[#ffffff33] hover:bg-white"
+        >
+          {isLoading ? "Signing in..." : "Sign in"}
+        </button>
+      </motion.form>
       <Footer />
-    </>
+    </main>
   );
 }
 

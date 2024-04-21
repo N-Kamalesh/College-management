@@ -11,6 +11,7 @@ import {
   faCircleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 import Footer from "../components/Footer";
+import { useSelector } from "react-redux";
 
 const { VITE_BASE_URL } = import.meta.env;
 const EMAIL_REGEX = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
@@ -46,6 +47,18 @@ function StudentResgister() {
 
   const [errMsg, setErrMsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const { isAuthenticated, role } = useSelector((state) => state.user);
+
+  useEffect(
+    function () {
+      if (isAuthenticated) {
+        if (role === "student") navigate("/student/app", { replace: true });
+        else navigate("/staff/app", { replace: true });
+      }
+    },
+    [isAuthenticated, navigate, role]
+  );
 
   useEffect(
     function () {
@@ -145,7 +158,8 @@ function StudentResgister() {
         setErrMsg(response.data.message);
       }
     } catch (error) {
-      if (error.response.data.message) setErrMsg(error.response.data.message);
+      if (error?.response?.data?.message)
+        setErrMsg(error?.response?.data?.message);
       else setErrMsg("Something went wrong! Please try again.");
     } finally {
       setIsLoading(false);

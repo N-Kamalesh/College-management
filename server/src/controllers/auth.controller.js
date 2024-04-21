@@ -72,14 +72,49 @@ export async function studentSignUpController(req, res, next) {
   }
 }
 
-export function staffSignInController(req, res) {
+export async function staffSignInController(req, res, next) {
+  const { staffId, password } = req.body;
+  console.log(bcryptjs.hashSync(password, 10));
   console.log(req.body);
-  res.send("User trying to sign in");
+  try {
+    const response = await db.query("SELECT * FROM staff WHERE staffId=$1", [
+      staffId,
+    ]);
+    if (!response.rowCount) {
+      return next(errorHandler(404, "Staff not found!"));
+    } else {
+      const validPwd = bcryptjs.compareSync(
+        password,
+        response.rows[0].password
+      );
+      if (!validPwd) return next(errorHandler(401, "Wrong password!"));
+      const { rowCount } = await db.query(
+        "select * from staff join department on department.hod = staff.staffId where staffId=$1",
+        [staffId]
+      );
+      let isHod = false;
+      if (rowCount) isHod = true;
+      const { password: hashedPassword, ...data } = response.rows[0];
+      const token = createJWT(data);
+      const expiryDate = new Date(Date.now() + 1 * 86400 * 1000);
+      res.cookie("accessToken", token, {
+        httpOnly: true,
+        expires: expiryDate,
+        sameSite: "None",
+        secure: false,
+      });
+      console.log(token);
+      res.status(200).json({ data, isHod, success: true });
+      console.log("here");
+    }
+  } catch (error) {
+    next(error);
+  }
 }
 
 export async function studentSignInController(req, res, next) {
   console.log(req.body);
-  const token = req.cookies?.token;
+  const token = req.cookies?.accessToken;
   console.log(token);
   const { rollno, password } = req.body;
   try {
@@ -96,15 +131,15 @@ export async function studentSignInController(req, res, next) {
       if (!validPwd) return next(errorHandler(401, "Wrong password!"));
       const { password: hashedPassword, ...data } = response.rows[0];
       const token = createJWT(data);
-      const expiryDate = new Date(Date.now()) + 1 * 86400 * 1000;
+      const expiryDate = new Date(Date.now() + 1 * 86400 * 1000);
       res.cookie("accessToken", token, {
         httpOnly: true,
-        // expires: expiryDate,
+        expires: expiryDate,
         sameSite: "None",
         secure: false,
       });
       console.log(token);
-      res.status(200).json({ ...data, success: true });
+      res.status(200).json({ data, success: true });
     }
   } catch (error) {
     next(error);

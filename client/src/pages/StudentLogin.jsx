@@ -1,11 +1,17 @@
 import PageNav from "../components/PageNav";
 import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleExclamation,
+  faRepeat,
+} from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import Footer from "../components/Footer";
+import { studentLoginSuccess } from "../redux/user/userSlice";
+import cryptoRandomString from "crypto-random-string";
 
 const { VITE_BASE_URL } = import.meta.env;
 const PWD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
@@ -13,21 +19,43 @@ const RNO_REGEX = /^20[\d]{8}$/;
 
 function StudentLogin() {
   const navigate = useNavigate();
+  const [captcha, setCaptcha] = useState(() =>
+    cryptoRandomString({ length: 6, type: "base64" })
+  );
+  const [matchCaptcha, setMatchCaptcha] = useState("");
   const [rollno, setRollno] = useState("");
   const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const dispatch = useDispatch();
+  const { isAuthenticated, role } = useSelector((state) => state.user);
+
+  useEffect(
+    function () {
+      if (isAuthenticated) {
+        if (role === "student") navigate("/student/app", { replace: true });
+        else navigate("/staff/app", { replace: true });
+      }
+    },
+    [isAuthenticated, navigate, role]
+  );
+
   useEffect(
     function () {
       setErrMsg("");
     },
-    [password, rollno]
+    [password, rollno, matchCaptcha]
   );
+
+  function changeCaptcha() {
+    setCaptcha(cryptoRandomString({ length: 6, type: "base64" }));
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
     console.log("Form submitted");
+    setErrMsg("");
     if (!password.trim() || !rollno.trim()) {
       setErrMsg("Please fill all fields!");
       return;
@@ -42,6 +70,11 @@ function StudentLogin() {
       setErrMsg("Please enter valid password");
       return;
     }
+    if (captcha !== matchCaptcha) {
+      setErrMsg("Please enter captcha correctly");
+      changeCaptcha();
+      return;
+    }
     const formData = { rollno, password };
     try {
       setIsLoading(true);
@@ -54,12 +87,15 @@ function StudentLogin() {
       );
       console.log(response.data);
       if (response.data.success) {
+        dispatch(studentLoginSuccess(response.data.data));
         navigate("/");
         console.log("Success");
       } else {
         setErrMsg(response.data.message);
+        changeCaptcha();
       }
     } catch (error) {
+      changeCaptcha();
       if (error?.response?.data?.message)
         setErrMsg(error?.response?.data?.message);
       else setErrMsg("Something went wrong! Please try again.");
@@ -146,9 +182,34 @@ function StudentLogin() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        <div className="w-full mx-auto py-2 px-4 rounded-3xl bg-transparent border border-[#ffffff80] border-r-[#ffffff33] border-b-[#ffffff33] focus:border focus:shadow-[0_5px_15px_#ffffff33] focus:outline-none text-white placeholder:text-white/[0.75]  text-center  tracking-widest text-xl relative">
+          <p className="cursor-not-allowed unselectable font-cursive line-through">
+            {captcha}
+          </p>
+          <span
+            className="absolute right-4 top-2 cursor-pointer"
+            onClick={changeCaptcha}
+          >
+            <FontAwesomeIcon icon={faRepeat} />
+          </span>
+        </div>
+        <input
+          className="w-full mx-auto py-2 px-4 rounded-3xl bg-transparent border border-[#ffffff80] border-r-[#ffffff33] border-b-[#ffffff33] focus:border focus:shadow-[0_5px_15px_#ffffff33] focus:outline-none text-white placeholder:text-white/[0.75]"
+          type="text"
+          name="captcha"
+          placeholder="Enter the CAPTCHA"
+          required
+          value={matchCaptcha}
+          onChange={(e) => setMatchCaptcha(e.target.value)}
+        />
         <button
           disabled={
-            !rollno.trim() || !password.trim() || isLoading ? true : false
+            !rollno.trim() ||
+            !password.trim() ||
+            !matchCaptcha.trim() ||
+            isLoading
+              ? true
+              : false
           }
           type="submit"
           className="

@@ -2,7 +2,7 @@ import express from "express";
 import "dotenv/config";
 import router from "./src/routes/routes.js";
 import cors from "cors";
-const { PORT } = process.env;
+const { PORT, CLIENT_URL } = process.env;
 import cookieParser from "cookie-parser";
 
 const app = express();
@@ -10,7 +10,7 @@ const port = PORT || 5000;
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: CLIENT_URL,
     credentials: true,
   })
 );

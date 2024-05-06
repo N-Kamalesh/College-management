@@ -17,7 +17,7 @@ function AnnouncementTab({ announcement, onBack }) {
       >
         <FontAwesomeIcon icon={faCircleArrowLeft} />
       </button>
-      <h2 className="mt-6 lg:mt-0 text-lg md:text-2xl text-indigo-900 text-bold text-center">
+      <h2 className="mt-6 lg:mt-0 text-lg md:text-2xl text-indigo-900 font-semibold text-center">
         {announcement.title}
       </h2>
       <h3 className="text-center text-md md:text-xl p-2 bg-gray-100 rounded-md ">

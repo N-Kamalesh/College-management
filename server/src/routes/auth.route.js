@@ -1,13 +1,14 @@
 import express from "express";
 import {
   studentSignInController,
-  studentSignUpController,
+  adminSignInController,
   staffSignInController,
 } from "../controllers/auth.controller.js";
+import { verifyJWT } from "../utils/jwt.js";
 
 const authRouter = express.Router();
 
-authRouter.post("/student/signup", studentSignUpController);
+authRouter.post("/admin/signin", adminSignInController);
 authRouter.post("/student/signin", studentSignInController);
 authRouter.post("/staff/signin", staffSignInController);
 

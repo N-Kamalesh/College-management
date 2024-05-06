@@ -1,5 +1,7 @@
 import express from "express";
-import userRoutes from "./user.route.js";
+import studentRoutes from "./student.route.js";
+import staffRoutes from "./staff.route.js";
+import adminRoutes from "./admin.route.js";
 import authRoutes from "./auth.route.js";
 const router = express.Router();
 
@@ -7,7 +9,9 @@ router.get("/", (req, res) => {
   res.status(200).send("You hit the school db route!");
 });
 
-router.use("/user", userRoutes);
+router.use("/student", studentRoutes);
+router.use("/staff", staffRoutes);
+router.use("/admin", adminRoutes);
 router.use("/auth", authRoutes);
 
 router.use((err, req, res, next) => {

@@ -6,7 +6,7 @@ import {
   faRepeat,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import Footer from "../components/Footer";
@@ -35,7 +35,8 @@ function StudentLogin() {
     function () {
       if (isAuthenticated) {
         if (role === "student") navigate("/student/app", { replace: true });
-        else navigate("/staff/app", { replace: true });
+        else if (role === "staff") navigate("/staff/app", { replace: true });
+        else if (role === "admin") navigate("/admin/app", { replace: true });
       }
     },
     [isAuthenticated, navigate, role]
@@ -58,16 +59,19 @@ function StudentLogin() {
     setErrMsg("");
     if (!password.trim() || !rollno.trim()) {
       setErrMsg("Please fill all fields!");
+      changeCaptcha();
       return;
     }
     const validRollno = RNO_REGEX.test(rollno);
     if (!validRollno) {
       setErrMsg("Please enter valid roll number");
+      changeCaptcha();
       return;
     }
     const validPassword = PWD_REGEX.test(password);
     if (!validPassword) {
       setErrMsg("Please enter valid password");
+      changeCaptcha();
       return;
     }
     if (captcha !== matchCaptcha) {
@@ -80,14 +84,11 @@ function StudentLogin() {
       setIsLoading(true);
       const response = await axios.post(
         `${VITE_BASE_URL}/auth/student/signin`,
-        formData,
-        {
-          withCredentials: true,
-        }
+        formData
       );
       console.log(response.data);
       if (response.data.success) {
-        dispatch(studentLoginSuccess(response.data.data));
+        dispatch(studentLoginSuccess(response.data.data, response.data.token));
         navigate("/");
         console.log("Success");
       } else {
@@ -109,10 +110,12 @@ function StudentLogin() {
       <PageNav />
       <motion.h1
         initial={{
-          x: "1000px",
+          y: "100px",
+          opacity: 0,
         }}
         animate={{
-          x: 0,
+          y: 0,
+          opacity: 1,
         }}
         transition={{
           duration: 1.5,
@@ -148,9 +151,11 @@ function StudentLogin() {
       </AnimatePresence>
       <motion.form
         initial={{
-          y: "-1000px",
+          opacity: 0,
+          y: "-100px",
         }}
         animate={{
+          opacity: 1,
           y: 0,
         }}
         transition={{
@@ -217,12 +222,6 @@ function StudentLogin() {
         >
           {isLoading ? "Signing in..." : "Sign in"}
         </button>
-        <p>
-          <span className="text-white">Not registed ? </span>
-          <Link to="/student/signup">
-            <span className="text-emerald-400">Sign up</span>
-          </Link>
-        </p>
       </motion.form>
       <Footer />
     </main>

@@ -6,7 +6,7 @@ import {
   faCircleExclamation,
   faRepeat,
 } from "@fortawesome/free-solid-svg-icons";
-import { staffLoginSuccess } from "../redux/user/userSlice";
+import { adminLoginSuccess } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -15,15 +15,15 @@ import axios from "axios";
 
 const { VITE_BASE_URL } = import.meta.env;
 const PWD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
-const STAFFID_REGEX = /^2[\d]{3}$/;
-function StaffLogin() {
+const EMAIL_REGEX = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
+function AdminLogin() {
   const navigate = useNavigate();
   const [captcha, setCaptcha] = useState(() =>
     cryptoRandomString({ length: 6, type: "base64" })
   );
-  const [matchCaptcha, setMatchCaptcha] = useState("");
-  const [staffId, setStaffId] = useState("");
-  const [password, setPassword] = useState("");
+  const [matchCaptcha, setMatchCaptcha] = useState(() => captcha);
+  const [email, setEmail] = useState("admin@gmail.com");
+  const [password, setPassword] = useState("Admin@1234");
   const [errMsg, setErrMsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
@@ -32,10 +32,10 @@ function StaffLogin() {
   useEffect(
     function () {
       if (isAuthenticated) {
-        if (role === "staff") navigate("/staff/app", { replace: true });
+        if (role === "admin") navigate("/admin/app", { replace: true });
+        else if (role === "staff") navigate("/staff/app", { replace: true });
         else if (role === "student")
           navigate("/student/app", { replace: true });
-        else if (role === "admin") navigate("/admin/app", { replace: true });
       }
     },
     [isAuthenticated, navigate, role]
@@ -45,7 +45,7 @@ function StaffLogin() {
     function () {
       setErrMsg("");
     },
-    [password, staffId, matchCaptcha]
+    [password, email, matchCaptcha]
   );
 
   function changeCaptcha() {
@@ -56,13 +56,13 @@ function StaffLogin() {
     e.preventDefault();
     console.log("Form submitted");
     setErrMsg("");
-    if (!password.trim() || !staffId.trim()) {
+    if (!password.trim() || !email.trim()) {
       setErrMsg("Please fill all fields!");
       return;
     }
-    const vaildStaffId = STAFFID_REGEX.test(staffId);
-    if (!vaildStaffId) {
-      setErrMsg("Please enter valid staff id");
+    const validRollno = EMAIL_REGEX.test(email);
+    if (!validRollno) {
+      setErrMsg("Please enter valid email");
       return;
     }
     const validPassword = PWD_REGEX.test(password);
@@ -76,22 +76,16 @@ function StaffLogin() {
       changeCaptcha();
       return;
     }
-    const formData = { staffId, password };
+    const formData = { email, password };
     try {
       setIsLoading(true);
       const response = await axios.post(
-        `${VITE_BASE_URL}/auth/staff/signin`,
+        `${VITE_BASE_URL}/auth/admin/signin`,
         formData
       );
       console.log(response.data);
       if (response.data.success) {
-        dispatch(
-          staffLoginSuccess(
-            response.data.data,
-            response.data.token,
-            response.data.isHod
-          )
-        );
+        dispatch(adminLoginSuccess(response.data.data, response.data.token));
         navigate("/");
         console.log("Success");
       } else {
@@ -99,6 +93,7 @@ function StaffLogin() {
         changeCaptcha();
       }
     } catch (error) {
+      console.log(error);
       changeCaptcha();
       if (error?.response?.data?.message)
         setErrMsg(error?.response?.data?.message);
@@ -126,7 +121,7 @@ function StaffLogin() {
         }}
         className="text-3xl text-center my-6 font-semibold text-white animate-pulse"
       >
-        Staff Login
+        Admin Login
       </motion.h1>
       <AnimatePresence>
         {errMsg && (
@@ -173,13 +168,13 @@ function StaffLogin() {
       >
         <input
           className="w-full mx-auto py-2 px-4 rounded-3xl bg-transparent border border-[#ffffff80] border-r-[#ffffff33] border-b-[#ffffff33] focus:border focus:shadow-[0_5px_15px_#ffffff33] focus:outline-none text-white placeholder:text-white/[0.75]"
-          type="text"
-          name="staffId"
-          placeholder="Staff ID"
+          type="email"
+          name="email"
+          placeholder="Email"
           required
           autoComplete="off"
-          value={staffId}
-          onChange={(e) => setStaffId(e.target.value)}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <input
           className="w-full mx-auto py-2 px-4 rounded-3xl bg-transparent border border-[#ffffff80] border-r-[#ffffff33] border-b-[#ffffff33] focus:border focus:shadow-[0_5px_15px_#ffffff33] focus:outline-none text-white placeholder:text-white/[0.75]"
@@ -212,7 +207,7 @@ function StaffLogin() {
         />
         <button
           disabled={
-            !staffId.trim() ||
+            !email.trim() ||
             !password.trim() ||
             !matchCaptcha.trim() ||
             isLoading
@@ -231,4 +226,4 @@ function StaffLogin() {
   );
 }
 
-export default StaffLogin;
+export default AdminLogin;

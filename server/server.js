@@ -10,7 +10,7 @@ const port = PORT || 5000;
 
 app.use(
   cors({
-    origin: CLIENT_URL,
+    origin: String(CLIENT_URL),
     credentials: true,
   })
 );

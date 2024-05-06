@@ -15,12 +15,12 @@ function Contact() {
       <section className="flex flex-col md:flex-row mt-12 max-w-7xl w-full mx-auto justify-around items-center">
         <motion.img
           initial={{
-            y: "-500px",
             rotate: "0deg",
+            scale: 0,
           }}
           animate={{
-            y: 0,
             rotate: "360deg",
+            scale: 1,
           }}
           transition={{
             duration: 1.5,
@@ -57,10 +57,12 @@ function Contact() {
       <section className="flex flex-col md:flex-row w-full justify-evenly items-center my-10 md:my-20 ">
         <motion.div
           initial={{
-            x: -1100,
+            opacity: 0,
+            y: "100px",
           }}
           animate={{
-            x: 0,
+            opacity: 1,
+            y: 0,
           }}
           transition={{
             delay: 1,
@@ -87,10 +89,12 @@ function Contact() {
         </motion.div>
         <motion.div
           initial={{
-            x: 500,
+            opacity: 0,
+            y: "100px",
           }}
           animate={{
-            x: 0,
+            opacity: 1,
+            y: 0,
           }}
           transition={{
             delay: 1,

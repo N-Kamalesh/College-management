@@ -65,3 +65,14 @@ aside .active {
   -ms-user-select: none;
   user-select: none;
 }
+
+
+/*Staff Dashboard*/
+.one, .two, .contact{
+  padding: 4px;
+  font-weight: 600;
+  overflow: hidden;
+}
+.staff{
+  font-weight: 500;
+}

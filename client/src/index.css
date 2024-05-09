@@ -77,8 +77,3 @@ aside .active {
 .staff{
   font-weight: 500;
 }
-.staff-layout-outer{
-  background-image: url("./assets/staffDashBg.avif");
-  background-repeat: no-repeat;
-  background-size: cover;
-}

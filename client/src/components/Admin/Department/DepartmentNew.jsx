@@ -62,9 +62,11 @@ function DepartmentNew({ onSubmit, onBack }) {
       />
 
       <button
-        className="bg-indigo-600  hover:bg-indigo-800  text-sm md:text-lg rounded-md text-white px-4 py-2 "
+        className="bg-indigo-600 disabled:bg-gray-300 hover:bg-indigo-800 cursor-pointer text-sm md:text-lg rounded-md text-white px-4 py-2 "
         disabled={
-          !data.deptcode.trim() || !data.deptname.trim() || !data.hod_id.trim()
+          !String(data.deptcode).trim() ||
+          !data.deptname.trim() ||
+          !String(data.hod_id).trim()
         }
       >
         Add Department

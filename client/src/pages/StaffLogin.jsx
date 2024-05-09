@@ -92,7 +92,6 @@ function StaffLogin() {
             response.data.isHod
           )
         );
-        navigate("/");
         console.log("Success");
       } else {
         setErrMsg(response.data.message);

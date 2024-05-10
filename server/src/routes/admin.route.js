@@ -11,10 +11,19 @@ import {
   addCourse,
   updateCourse,
   deleteCourse,
+  getStudents,
+  addStudent,
+  updateStudent,
+  deleteStudent,
 } from "../controllers/admin.controller.js";
 import { verifyJWT } from "../utils/jwt.js";
 
 const adminRouter = express.Router();
+
+adminRouter.get("/student", verifyJWT, getStudents);
+adminRouter.post("/student/add", verifyJWT, addStudent);
+adminRouter.put("/student/:id", verifyJWT, updateStudent);
+adminRouter.delete("/student/:id", verifyJWT, deleteStudent);
 
 adminRouter.get("/announcement", verifyJWT, getAnnouncements);
 adminRouter.post("/announcement/add", verifyJWT, addAnnouncement);

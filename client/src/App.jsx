@@ -4,9 +4,11 @@ import SpinnerFullPage from "./components/SpinnerFullPage";
 import AppLayout from "./pages/AppLayout";
 import Announcement from "./components/Admin/Announcement/Announcement";
 import Department from "./components/Admin/Department/Department";
+import StudentDashboard from "./components/Students/Dashboard";
 import StaffLayout from "./pages/StaffLayout";
 import StaffDashBoard from "./pages/StaffDashBoard";
 import Course from "./components/Admin/Courses/Course";
+import Student from "./components/Admin/Student/Student";
 import StaffCourses from "./pages/StaffCourses";
 const HomePage = lazy(() => import("./pages/Homepage"));
 const StudentLogin = lazy(() => import("./pages/StudentLogin"));
@@ -28,20 +30,25 @@ function App() {
             <Route path="signin" element={<StudentLogin />} />
             <Route
               path="app"
-              element={<ProtectedRoute></ProtectedRoute>}
-            ></Route>
+              element={<ProtectedRoute><AppLayout/></ProtectedRoute>}
+            >
+              <Route index element={<Navigate replace to ="dashboard"/>}></Route>
+                <Route path="dashboard" element={<StudentDashboard />} />
+            </Route>
           </Route>
           <Route path="/staff" element={<Layout />}>
             <Route index element={<Navigate replace to="signin" />} />
             <Route path="signin" element={<StaffLogin />} />
-            <Route 
-              path="app" 
+            <Route
+              path="app"
               element={
                 <ProtectedRoute>
                   <StaffLayout />
                 </ProtectedRoute>
-              } 
+              }
             >
+              <Route index element={<Navigate replace to="dashboard" />} />
+              <Route path="dashboard" element={<StaffDashBoard />} />
               <Route index element = {<StaffDashBoard />} />
               <Route path="course" element = {<StaffCourses />} />  
             </Route>
@@ -58,14 +65,7 @@ function App() {
               }
             >
               <Route index element={<Navigate replace to="student" />} />
-              <Route
-                path="student"
-                element={
-                  <h1 className="bg-red-600 text-black text-4xl w-full">
-                    dashboard
-                  </h1>
-                }
-              />
+              <Route path="student" element={<Student />} />
               <Route path="announcement" element={<Announcement />} />
               <Route path="course" element={<Course />} />
               <Route path="department" element={<Department />} />

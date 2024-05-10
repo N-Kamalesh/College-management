@@ -3,7 +3,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url("./assets/img4.jpeg");
 
 * {
   font-family: "Poppins", sans-serif;
@@ -76,4 +75,9 @@ aside .active {
 }
 .staff{
   font-weight: 500;
+}
+
+/*Staff Course*/
+.staff-course-li-div{
+  height: 25px;
 }

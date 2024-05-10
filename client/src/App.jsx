@@ -6,6 +6,7 @@ import Announcement from "./components/Admin/Announcement/Announcement";
 import Department from "./components/Admin/Department/Department";
 import StaffLayout from "./pages/StaffLayout";
 import StaffDashBoard from "./pages/StaffDashBoard";
+import StaffCourses from "./pages/StaffCourses";
 const HomePage = lazy(() => import("./pages/Homepage"));
 const StudentLogin = lazy(() => import("./pages/StudentLogin"));
 const StaffLogin = lazy(() => import("./pages/StaffLogin"));
@@ -40,7 +41,8 @@ function App() {
                 </ProtectedRoute>
               } 
             >
-              <Route index element = {<StaffDashBoard />} />  
+              <Route index element = {<StaffDashBoard />} />
+              <Route path="course" element = {<StaffCourses />} />  
             </Route>
           </Route>
           <Route path="/admin" element={<Layout />}>

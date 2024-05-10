@@ -16,7 +16,7 @@ function CourseTab({ course, onBack }) {
       >
         <FontAwesomeIcon icon={faCircleArrowLeft} />
       </button>
-      <div className="flex flex-col justify-center my-auto items-center gap-2 bg-gray-200  text-center p-4 rounded-md">
+      <div className="flex flex-col justify-center my-auto items-center gap-2 bg-gray-200  text-center p-8 rounded-md">
         <p className=" text-md md:text-lg">
           <span className="text-indigo-900 font-semibold">Course Name: </span>
           {course.coursename}

@@ -7,6 +7,7 @@ import Department from "./components/Admin/Department/Department";
 import StaffLayout from "./pages/StaffLayout";
 import StaffDashBoard from "./pages/StaffDashBoard";
 import Course from "./components/Admin/Courses/Course";
+import Student from "./components/Admin/Student/Student";
 const HomePage = lazy(() => import("./pages/Homepage"));
 const StudentLogin = lazy(() => import("./pages/StudentLogin"));
 const StaffLogin = lazy(() => import("./pages/StaffLogin"));
@@ -33,15 +34,16 @@ function App() {
           <Route path="/staff" element={<Layout />}>
             <Route index element={<Navigate replace to="signin" />} />
             <Route path="signin" element={<StaffLogin />} />
-            <Route 
-              path="app" 
+            <Route
+              path="app"
               element={
                 <ProtectedRoute>
                   <StaffLayout />
                 </ProtectedRoute>
-              } 
+              }
             >
-              <Route index element = {<StaffDashBoard />} />  
+              <Route index element={<Navigate replace to="dashboard" />} />
+              <Route path="dashboard" element={<StaffDashBoard />} />
             </Route>
           </Route>
           <Route path="/admin" element={<Layout />}>
@@ -56,14 +58,7 @@ function App() {
               }
             >
               <Route index element={<Navigate replace to="student" />} />
-              <Route
-                path="student"
-                element={
-                  <h1 className="bg-red-600 text-black text-4xl w-full">
-                    dashboard
-                  </h1>
-                }
-              />
+              <Route path="student" element={<Student />} />
               <Route path="announcement" element={<Announcement />} />
               <Route path="course" element={<Course />} />
               <Route path="department" element={<Department />} />

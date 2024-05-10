@@ -14,3 +14,17 @@ export const timeOptions = {
   year: "numeric",
   timeZone: "Asia/Kolkata",
 };
+
+export function extractUniqueDepartments(students) {
+  const uniqueDepartmentsMap = new Map();
+
+  students.forEach((student) => {
+    uniqueDepartmentsMap.set(student.deptcode, student.deptname);
+  });
+
+  const uniqueDepartmentsArray = Array.from(uniqueDepartmentsMap).map(
+    ([deptcode, deptname]) => [deptcode, deptname]
+  );
+
+  return uniqueDepartmentsArray;
+}

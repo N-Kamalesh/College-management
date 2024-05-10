@@ -12,6 +12,7 @@ export async function adminSignInController(req, res, next) {
     if (!response.rowCount) {
       return next(errorHandler(404, "Admin not found!"));
     } else {
+      
       const validPwd = bcryptjs.compareSync(
         password,
         response.rows[0].password

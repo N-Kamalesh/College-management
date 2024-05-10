@@ -114,7 +114,7 @@ function Sidebar() {
               }`}
             >
               <div className="leading-4">
-                <h4 className="font-semibold text-indigo-800">{user.name}</h4>
+                <h4 className="font-semibold text-indigo-800"> {role === "admin" ? user.name : role === "staff" ? user.staffid : user.rollno}</h4>
                 <p className="text-xs text-gray-600">{user.email}</p>
               </div>
               <FontAwesomeIcon icon={faEllipsisVertical} />
@@ -123,7 +123,7 @@ function Sidebar() {
               <div
                 className={`absolute left-full top-4 rounded-md px-2 py-1 ml-2 bg-indigo-100 text-indigo-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
               >
-                {user.name}
+                {role === "admin" ? user.name : role === "staff" ? user.staffid : user.rollno}
               </div>
             )}
             {error && (

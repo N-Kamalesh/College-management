@@ -115,7 +115,7 @@ function StaffCourses(){
     }
     return (
         <div className="staff-course-outer w-screen">
-            <div className="staff-course-button-container h-20 mt-16 flex justify-center items-center">
+            <div className="staff-course-button-container mt-16 flex justify-center items-center flex-wrap gap-3">
                 {courses.map(
                     (item) => <StaffCourseButton key={item.courseid} id={item.courseid} text={item.coursename} onClickHandler={getStudents} />
                 )}

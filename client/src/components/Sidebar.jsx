@@ -10,7 +10,11 @@ import staff from "../assets/staff.png";
 import student from "../assets/student.png";
 import admin from "../assets/admin.png";
 import { useDispatch, useSelector } from "react-redux";
-import { ADMIN_SIDEBAR_ITEMS } from "../constants/sidebar";
+import {
+  ADMIN_SIDEBAR_ITEMS,
+  STAFF_SIDEBAR_ITEMS,
+  STUDENT_SIDEBAR_ITEMS,
+} from "../constants/sidebar";
 import SidebarItem from "./SidebarItem";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -32,7 +36,12 @@ function Sidebar() {
       console.log(error);
     }
   }
-
+  const items =
+    role === "student"
+      ? STUDENT_SIDEBAR_ITEMS
+      : role === "admin"
+      ? ADMIN_SIDEBAR_ITEMS
+      : STAFF_SIDEBAR_ITEMS;
   useEffect(
     function () {
       setTimeout(() => {
@@ -76,7 +85,7 @@ function Sidebar() {
           </button>
         </div>
         <ul className="flex-1 px-3">
-          {ADMIN_SIDEBAR_ITEMS.map((item, index) => (
+          {items.map((item, index) => (
             <SidebarItem
               icon={item.icon}
               text={item.text}
@@ -114,7 +123,14 @@ function Sidebar() {
               }`}
             >
               <div className="leading-4">
-                <h4 className="font-semibold text-indigo-800"> {role === "admin" ? user.name : role === "staff" ? user.staffid : user.rollno}</h4>
+                <h4 className="font-semibold text-indigo-800">
+                  {" "}
+                  {role === "admin"
+                    ? user.name
+                    : role === "staff"
+                    ? user.staffid
+                    : user.rollno}
+                </h4>
                 <p className="text-xs text-gray-600">{user.email}</p>
               </div>
               <FontAwesomeIcon icon={faEllipsisVertical} />
@@ -123,7 +139,11 @@ function Sidebar() {
               <div
                 className={`absolute left-full top-4 rounded-md px-2 py-1 ml-2 bg-indigo-100 text-indigo-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
               >
-                {role === "admin" ? user.name : role === "staff" ? user.staffid : user.rollno}
+                {role === "admin"
+                  ? user.name
+                  : role === "staff"
+                  ? user.staffid
+                  : user.rollno}
               </div>
             )}
             {error && (

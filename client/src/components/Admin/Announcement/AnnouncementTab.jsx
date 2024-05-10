@@ -1,7 +1,7 @@
 import { faCircleArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
-import { getDepartment, timeOptions } from "../../../constants/utils";
+import { timeOptions } from "../../../constants/utils";
 
 AnnouncementTab.propTypes = {
   announcement: PropTypes.object,
@@ -21,7 +21,7 @@ function AnnouncementTab({ announcement, onBack }) {
         {announcement.title}
       </h2>
       <h3 className="text-center text-md md:text-xl p-2 bg-gray-100 rounded-md ">
-        {getDepartment(announcement.deptcode)}
+        {announcement.deptname}
       </h3>
       <p className="whitespace-pre-wrap text-sm md:text-lg text-justify bg-gray-200  p-2 lg:p-4 rounded-md">
         {announcement.content}

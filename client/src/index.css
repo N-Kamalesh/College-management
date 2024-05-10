@@ -3,6 +3,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("./assets/img4.jpeg");
 
 * {
   font-family: "Poppins", sans-serif;
@@ -64,4 +65,15 @@ aside .active {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+
+/*Staff Dashboard*/
+.one, .two, .contact{
+  padding: 4px;
+  font-weight: 600;
+  overflow: hidden;
+}
+.staff{
+  font-weight: 500;
 }

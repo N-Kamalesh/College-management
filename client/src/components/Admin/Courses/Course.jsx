@@ -1,44 +1,31 @@
 import { useEffect, useState } from "react";
-import AnnouncementList from "./AnnouncementList";
+import CourseList from "./CourseList";
 import axios from "axios";
 import Spinner from "../../Spinner";
 import { useSelector } from "react-redux";
-import AnnouncementNew from "./AnnouncementNew";
+import CourseNew from "./CourseNew";
 import { AnimatePresence, motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import DialogBox from "../../DialogBox";
-import AnnouncementEdit from "./AnnouncementEdit";
-import AnnouncementTab from "./AnnouncementTab";
+import CourseEdit from "./CourseEdit";
+import CourseTab from "./CourseTab";
 
 const { VITE_BASE_URL } = import.meta.env;
-function Announcement() {
+function Course() {
   const [selectedId, setSelectedId] = useState(null);
-  const [announcements, setAnnouncements] = useState([]);
-  const [sortedAnnouncements, setSortedAnnouncements] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [mode, setMode] = useState("list");
-  const [sortBy, setSortBy] = useState("newcreated");
-  const [searchQuery, setSearchQuery] = useState("");
   const { token } = useSelector((state) => state.user);
   const [dialog, setDialog] = useState({
     message: "",
     isVisible: false,
   });
-
-  const announcement = announcements.find((announcement) =>
-    selectedId ? announcement.announcement_id === selectedId : false
+  const course = courses.find((course) =>
+    selectedId ? course.courseid === selectedId : false
   );
-
-  const searchedAnnouncements =
-    searchQuery.length > 0
-      ? sortedAnnouncements.filter((announcement) =>
-          `${announcement.title} ${announcement.content}`
-            .toLowerCase()
-            .includes(searchQuery.toLowerCase())
-        )
-      : sortedAnnouncements;
 
   function onAdd() {
     setMode("new");
@@ -58,7 +45,7 @@ function Announcement() {
     try {
       setIsLoading(true);
       const response = await axios.post(
-        `${VITE_BASE_URL}/admin/announcement/add`,
+        `${VITE_BASE_URL}/admin/course/add`,
         data,
         {
           headers: {
@@ -87,7 +74,7 @@ function Announcement() {
     setSelectedId(id);
     setDialog((dialog) => ({
       ...dialog,
-      message: "Are you sure you want to delete this announcement?",
+      message: "Are you sure you want to delete this course?",
       isVisible: true,
     }));
   }
@@ -97,7 +84,7 @@ function Announcement() {
       try {
         setIsLoading(true);
         const response = await axios.delete(
-          `${VITE_BASE_URL}/admin/announcement/${selectedId}`,
+          `${VITE_BASE_URL}/admin/course/${selectedId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -133,7 +120,7 @@ function Announcement() {
     try {
       setIsLoading(true);
       const response = await axios.put(
-        `${VITE_BASE_URL}/admin/announcement/${selectedId}`,
+        `${VITE_BASE_URL}/admin/course/${selectedId}`,
         data,
         {
           headers: {
@@ -161,20 +148,17 @@ function Announcement() {
 
   useEffect(
     function () {
-      async function fetchAnnouncements() {
+      async function fetchCourses() {
         try {
           setIsLoading(true);
-          const response = await axios.get(
-            `${VITE_BASE_URL}/admin/announcement`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
+          const response = await axios.get(`${VITE_BASE_URL}/admin/course`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
           console.log(response);
           if (response.data.success) {
-            setAnnouncements(response.data.data);
+            setCourses(response.data.data);
             console.log("Fetching Success");
           } else {
             setError(response.data.message);
@@ -188,7 +172,7 @@ function Announcement() {
           setIsLoading(false);
         }
       }
-      if (mode === "list" && selectedId === null) fetchAnnouncements();
+      if (mode === "list" && selectedId === null) fetchCourses();
     },
     [token, mode, selectedId]
   );
@@ -202,43 +186,10 @@ function Announcement() {
     [error]
   );
 
-  useEffect(
-    function () {
-      let sortedAnnouncements;
-      switch (sortBy) {
-        case "newcreated":
-          sortedAnnouncements = [...announcements].sort((a, b) => {
-            const dateA = new Date(a.created_at);
-            const dateB = new Date(b.created_at);
-            return dateB - dateA;
-          });
-          break;
-        case "oldcreated":
-          sortedAnnouncements = [...announcements].sort((a, b) => {
-            const dateA = new Date(a.created_at);
-            const dateB = new Date(b.created_at);
-            return dateA - dateB;
-          });
-          break;
-        case "lastupdated":
-          sortedAnnouncements = [...announcements].sort((a, b) => {
-            const dateA = new Date(a.updated_at);
-            const dateB = new Date(b.updated_at);
-            return dateB - dateA;
-          });
-          break;
-        default:
-          sortedAnnouncements = [...announcements];
-      }
-      setSortedAnnouncements(sortedAnnouncements);
-    },
-    [sortBy, announcements]
-  );
-
   return (
     <main className="relative w-full min-h-screen flex flex-col items-center">
       <h1 className="text-lg md:text-2xl text-indigo-800 font-bold  py-4">
-        Announcements
+        Courses
       </h1>
       <AnimatePresence>
         {error && (
@@ -266,30 +217,22 @@ function Announcement() {
       </AnimatePresence>
       {isLoading && <Spinner />}
       {!isLoading && mode === "list" && (
-        <AnnouncementList
-          announcements={searchedAnnouncements}
+        <CourseList
+          courses={courses}
           onAdd={onAdd}
-          sortBy={sortBy}
-          searchQuery={searchQuery}
-          setSortBy={setSortBy}
-          setSearchQuery={setSearchQuery}
           handleEditClick={handleEditClick}
           handleDeleteClick={handleDeleteClick}
           handleClick={handleClick}
         />
       )}
       {!isLoading && mode === "new" && (
-        <AnnouncementNew onBack={onBack} onSubmit={handleAdd} />
+        <CourseNew onBack={onBack} onSubmit={handleAdd} />
       )}
       {!isLoading && mode === "view" && (
-        <AnnouncementTab onBack={onBack} announcement={announcement} />
+        <CourseTab onBack={onBack} course={course} />
       )}
       {!isLoading && mode === "update" && (
-        <AnnouncementEdit
-          onBack={onBack}
-          announcement={announcement}
-          onSubmit={handleEdit}
-        />
+        <CourseEdit onBack={onBack} course={course} onSubmit={handleEdit} />
       )}
       {dialog.isVisible && (
         <DialogBox message={dialog.message} onDialog={handleDelete} />
@@ -298,4 +241,4 @@ function Announcement() {
   );
 }
 
-export default Announcement;
+export default Course;

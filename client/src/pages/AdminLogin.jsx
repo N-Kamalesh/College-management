@@ -86,7 +86,6 @@ function AdminLogin() {
       console.log(response.data);
       if (response.data.success) {
         dispatch(adminLoginSuccess(response.data.data, response.data.token));
-        navigate("/");
         console.log("Success");
       } else {
         setErrMsg(response.data.message);

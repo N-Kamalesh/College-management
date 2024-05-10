@@ -5,6 +5,9 @@ import AppLayout from "./pages/AppLayout";
 import Announcement from "./components/Admin/Announcement/Announcement";
 import Department from "./components/Admin/Department/Department";
 import StudentDashboard from "./components/Students/Dashboard";
+import StaffLayout from "./pages/StaffLayout";
+import StaffDashBoard from "./pages/StaffDashBoard";
+import Course from "./components/Admin/Courses/Course";
 const HomePage = lazy(() => import("./pages/Homepage"));
 const StudentLogin = lazy(() => import("./pages/StudentLogin"));
 const StaffLogin = lazy(() => import("./pages/StaffLogin"));
@@ -34,7 +37,16 @@ function App() {
           <Route path="/staff" element={<Layout />}>
             <Route index element={<Navigate replace to="signin" />} />
             <Route path="signin" element={<StaffLogin />} />
-            <Route path="app" element={<ProtectedRoute></ProtectedRoute>} />
+            <Route 
+              path="app" 
+              element={
+                <ProtectedRoute>
+                  <StaffLayout />
+                </ProtectedRoute>
+              } 
+            >
+              <Route index element = {<StaffDashBoard />} />  
+            </Route>
           </Route>
           <Route path="/admin" element={<Layout />}>
             <Route index element={<Navigate replace to="signin" />} />
@@ -57,6 +69,7 @@ function App() {
                 }
               />
               <Route path="announcement" element={<Announcement />} />
+              <Route path="course" element={<Course />} />
               <Route path="department" element={<Department />} />
               <Route
                 path="staff"

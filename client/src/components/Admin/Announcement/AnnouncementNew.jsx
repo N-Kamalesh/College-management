@@ -11,7 +11,7 @@ function AnnouncementNew({ onSubmit, onBack }) {
   const [data, setData] = useState({
     title: "",
     content: "",
-    deptcode: "101",
+    deptcode: "",
   });
   function handleChange(e) {
     const { name, value } = e.target;
@@ -51,37 +51,22 @@ function AnnouncementNew({ onSubmit, onBack }) {
         autoComplete="off"
         onChange={handleChange}
       />
-      <select
-        className="text-center border-2 border-indigo-200 w-full max-w-3xl px-4 py-2 text-sm md:text-lg focus:border-2 focus:border-indigo-800 focus:outline-none"
+      <input
+        className="border-2 mt-6 lg:mt-0 border-indigo-200 w-full max-w-3xl px-4 py-2 text-sm md:text-lg focus:border-2 focus:border-indigo-800 focus:outline-none"
+        placeholder="Enter the department code"
+        type="text"
         name="deptcode"
         value={data.deptcode}
+        autoComplete="off"
         onChange={handleChange}
-      >
-        <option value="" className="text-center" disabled>
-          ---Department---
-        </option>
-        <option value="101" className="text-center">
-          Mechanical Engineering
-        </option>
-        <option value="102" className="text-center">
-          Information Technology
-        </option>
-        <option value="103" className="text-center">
-          Computer Science and Engineering
-        </option>
-        <option value="104" className="text-center">
-          Electrical and Electronics Engineering
-        </option>
-        <option value="105" className="text-center">
-          Electronics and Communication Engineering
-        </option>
-        <option value="106" className="text-center">
-          Civil Engineering
-        </option>
-      </select>
+      />
       <button
-        className="bg-indigo-600  hover:bg-indigo-800  text-sm md:text-lg rounded-md text-white px-4 py-2 "
-        disabled={!data.title.trim() || !data.content.trim()}
+        className="bg-indigo-600 disabled:bg-gray-300 hover:bg-indigo-800 cursor-pointer text-sm md:text-lg rounded-md text-white px-4 py-2 "
+        disabled={
+          !data.title.trim() ||
+          !data.content.trim() ||
+          !String(data.deptcode).trim()
+        }
       >
         Add Announcement
       </button>

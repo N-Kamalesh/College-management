@@ -4,6 +4,7 @@ import SpinnerFullPage from "./components/SpinnerFullPage";
 import AppLayout from "./pages/AppLayout";
 import Announcement from "./components/Admin/Announcement/Announcement";
 import Department from "./components/Admin/Department/Department";
+import StudentDashboard from "./components/Students/Dashboard";
 const HomePage = lazy(() => import("./pages/Homepage"));
 const StudentLogin = lazy(() => import("./pages/StudentLogin"));
 const StaffLogin = lazy(() => import("./pages/StaffLogin"));
@@ -24,8 +25,11 @@ function App() {
             <Route path="signin" element={<StudentLogin />} />
             <Route
               path="app"
-              element={<ProtectedRoute></ProtectedRoute>}
-            ></Route>
+              element={<ProtectedRoute><AppLayout/></ProtectedRoute>}
+            >
+              <Route index element={<Navigate replace to ="dashboard"/>}></Route>
+                <Route path="dashboard" element={<StudentDashboard />} />
+            </Route>
           </Route>
           <Route path="/staff" element={<Layout />}>
             <Route index element={<Navigate replace to="signin" />} />

@@ -5,19 +5,55 @@ import axios from 'axios';
 
 function Dashboard() { 
   const { VITE_BASE_URL } = import.meta.env;
-  const {user}=useSelector(state=>state.user)
-  const [courseInstructors, setCourseInstructors] = useState();
+  const {user}=useSelector(state=>state.user);
+  const [courseInstructors, setCourseInstructors] = useState(
+      [
+            {
+                  coursename: "newCourse",
+                  fullname: "buddys instructor",
+                  deptcode: 102,
+                  designation: "phd in something",
+            },
+            {
+                  coursename: "newCourse",
+                  fullname: "buddys instructor",
+                  deptcode: 102,
+                  designation: "phd in something",
+            },
+            {
+                  coursename: "newCourse",
+                  fullname: "buddys instructor",
+                  deptcode: 102,
+                  designation: "phd in something",
+            },
+            {
+                  coursename: "newCourse",
+                  fullname: "buddys instructor",
+                  deptcode: 102,
+                  designation: "phd in something",
+            },
+            {
+                  coursename: "newCourse",
+                  fullname: "buddys instructor",
+                  deptcode: 102,
+                  designation: "phd in something",
+            },
+      ]
+      );
   useEffect(
       function() {
             async function fetchInstructors(){
-                  console.log("inside fetch instructors");
-                  const response = await axios.get(`${VITE_BASE_URL}/student/dashboard`);
-                  setCourseInstructors(response);
+                  try {
+                        const response = await axios.get(`${VITE_BASE_URL}/announcement`);
+                        // setCourseInstructors(response);
+                  } catch (error) {
+                        console.log("Error in fetchInstructions");
+                  }
             }
             fetchInstructors();
       }
       , 
-      [courseInstructors]
+      []
   );
   // {"user":"{\"isAuthenticated\":true,\"user\":{\"rollno\":2022103512,\"email\":\"abinaya1510@gmail.com\",\"fullname\":\"Dev…
   return (
@@ -62,14 +98,9 @@ function Dashboard() {
       </div>
 
       <div  className=' bg-indigo-800  m-10 flex shrink-0 h-auto py-4 px-4 overflow-x-auto justify-between'>
-        <FlipCard />
-        <FlipCard />
-        <FlipCard />
-        <FlipCard />
-        <FlipCard />
-        <FlipCard />
-        <FlipCard />
-        <FlipCard />
+        {courseInstructors.map(
+            (item, index) => <FlipCard key={index} coursename={item.coursename} deptcode={item.deptcode} designation={item.designation} fullname={item.fullname} />
+        )}
       </div>
     </main>
   );

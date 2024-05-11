@@ -7,6 +7,7 @@ import Department from "./components/Admin/Department/Department";
 import StudentDashboard from "./components/Students/Dashboard";
 import StaffLayout from "./pages/StaffLayout";
 import StaffDashBoard from "./pages/StaffDashBoard";
+import StaffCourses from "./pages/StaffCourses";
 import Course from "./components/Admin/Courses/Course";
 import Student from "./components/Admin/Student/Student";
 import Staff from "./components/Admin/Staff/Staff";

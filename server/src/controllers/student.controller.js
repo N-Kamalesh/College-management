@@ -14,4 +14,3 @@ export async function studentCourses(req, res, next) {
     next(error);
   }
 }
-/*SELECT S.fullname AS fullname, coursename, deptcode, designation FROM takes T NATURAL JOIN students NATURAL JOIN courses NATURAL JOIN staff S WHERE studentid=$1 AND T.sem=$2 */

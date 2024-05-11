@@ -19,6 +19,10 @@ import {
   addStaff,
   updateStaff,
   deleteStaff,
+  getTeaches,
+  addTeaches,
+  updateTeaches,
+  deleteTeaches,
 } from "../controllers/admin.controller.js";
 import { verifyJWT } from "../utils/jwt.js";
 
@@ -38,6 +42,11 @@ adminRouter.get("/announcement", verifyJWT, getAnnouncements);
 adminRouter.post("/announcement/add", verifyJWT, addAnnouncement);
 adminRouter.delete("/announcement/:id", verifyJWT, deleteAnnouncement);
 adminRouter.put("/announcement/:id", verifyJWT, updateAnnouncement);
+
+adminRouter.get("/teaches", verifyJWT, getTeaches);
+adminRouter.post("/teaches/add", verifyJWT, addTeaches);
+adminRouter.put("/teaches/:id", verifyJWT, updateTeaches);
+adminRouter.delete("/teaches/:id", verifyJWT, deleteTeaches);
 
 adminRouter.get("/course", verifyJWT, getCourses);
 adminRouter.post("/course/add", verifyJWT, addCourse);

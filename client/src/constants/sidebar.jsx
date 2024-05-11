@@ -54,7 +54,7 @@ export const STUDENT_SIDEBAR_ITEMS = [
   },
   {
     icon: <FontAwesomeIcon icon={faFileLines} />,
-    text: "Marks & Attendance",
+    text: "Marks",
     path: "marks",
   },
   {

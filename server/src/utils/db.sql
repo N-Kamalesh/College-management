@@ -72,7 +72,6 @@ CREATE TABLE IF NOT EXISTS public.course
     deptcode integer NOT NULL,
     credits integer NOT NULL,
     CONSTRAINT course_pkey PRIMARY KEY (courseid),
-    CONSTRAINT course_coursename_key UNIQUE (coursename)
 );
 
 CREATE TABLE IF NOT EXISTS public.takes

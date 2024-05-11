@@ -85,3 +85,30 @@ aside .active {
 .selected-button{
   background-color: #0b83a7;
 }
+
+/*Flip Card*/
+.card-content {
+  transform-style: preserve-3d;
+  transition: transform 0.5s linear 1ms;
+
+}
+.card-front, .card-back {
+  backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.card-front {
+  background-color: var(--first-color);
+}
+.card-back {
+  background-color: var(--second-color);
+  transform: rotateY(180deg);
+}
+
+.card-container::after {
+content: "";
+display: table;
+}
+.card-container:hover .card-content {
+transform: rotateY(180deg);
+}

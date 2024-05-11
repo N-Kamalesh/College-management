@@ -1,10 +1,10 @@
 import PropTypes from "prop-types";
-import CourseItem from "./CourseItem";
+import StaffItem from "./StaffItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 
-CourseList.propTypes = {
-  courses: PropTypes.array,
+StaffList.propTypes = {
+  staffs: PropTypes.array,
   onAdd: PropTypes.func,
   sortBy: PropTypes.string,
   searchQuery: PropTypes.string,
@@ -12,12 +12,12 @@ CourseList.propTypes = {
   setSearchQuery: PropTypes.func,
   handleDeleteClick: PropTypes.func,
   handleEditClick: PropTypes.func,
-  handleClick: PropTypes.func,
   departments: PropTypes.array,
+  handleClick: PropTypes.func,
 };
 
-function CourseList({
-  courses,
+function StaffList({
+  staffs,
   onAdd,
   sortBy,
   searchQuery,
@@ -35,12 +35,12 @@ function CourseList({
         className="bg-indigo-600 text-xs sm:text-sm md:text-lg hover:bg-indigo-800  rounded-md text-white px-4 py-2 "
       >
         <FontAwesomeIcon icon={faCirclePlus} />
-        <span className="ml-2">Add new course</span>
+        <span className="ml-2">Add new staff</span>
       </button>
       <section className="flex flex-col md:flex-row w-[90%] md:justify-evenly">
         <input
           className="border-2  border-indigo-200  max-w-3xl px-4 py-2 text-sm md:text-lg focus:border-2 focus:border-indigo-800 focus:outline-none w-full md:w-2/5"
-          placeholder="Search by course id or name"
+          placeholder="Search by staff id or name"
           type="text"
           name="searchQuery"
           value={searchQuery}
@@ -61,13 +61,13 @@ function CourseList({
           ))}
         </select>
       </section>
-      {courses.length === 0 ? (
-        <p className="text-center">No courses are available</p>
+      {staffs.length === 0 ? (
+        <p className="text-center">No staffs are available</p>
       ) : (
-        courses.map((course) => (
-          <CourseItem
-            course={course}
-            key={course.courseid}
+        staffs.map((staff) => (
+          <StaffItem
+            staff={staff}
+            key={staff.staffid}
             handleDeleteClick={handleDeleteClick}
             handleEditClick={handleEditClick}
             handleClick={handleClick}
@@ -78,4 +78,4 @@ function CourseList({
   );
 }
 
-export default CourseList;
+export default StaffList;

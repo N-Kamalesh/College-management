@@ -71,11 +71,8 @@ function Dashboard() {
         <FlipCard />
         <FlipCard />
       </div>
-      
-         
     </main>
-  )
+  );
 }
 
-export default Dashboard
-
+export default Dashboard;

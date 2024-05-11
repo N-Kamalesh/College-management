@@ -7,6 +7,7 @@ const EMAIL_REGEX = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
 const PWD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
 const MOB_REGEX = /^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$/;
 const RNO_REGEX = /^20[\d]{8}$/;
+const SID_REGEX = /^2[\d]{3}$/;
 
 export async function getAnnouncements(req, res, next) {
   try {
@@ -40,10 +41,9 @@ export async function addAnnouncement(req, res, next) {
 export async function deleteAnnouncement(req, res, next) {
   const id = req.params.id;
   try {
-    const response = await db.query(
-      "DELETE FROM announcements WHERE announcement_id = $1",
-      [id]
-    );
+    await db.query("DELETE FROM announcements WHERE announcement_id = $1", [
+      id,
+    ]);
     res
       .status(200)
       .json({ message: "Announcement deleted successfully", success: true });
@@ -73,7 +73,7 @@ export async function updateAnnouncement(req, res, next) {
 export async function getDepartments(req, res, next) {
   try {
     const response = await db.query(
-      "SELECT department.deptcode,deptname,hod_id,fullname,email,mobile,highest_qualification FROM department JOIN staff on staffid = hod_id"
+      "SELECT department.deptcode,deptname,hod_id,fullname,email,mobile,highest_qualification FROM department JOIN staff on staffid = hod_id ORDER BY deptcode"
     );
     res.status(200).json({ data: response.rows, success: true });
   } catch (error) {
@@ -124,7 +124,7 @@ export async function updateDepartment(req, res, next) {
 export async function getCourses(req, res, next) {
   try {
     const response = await db.query(
-      "SELECT courseid, coursename, course.deptcode, credits, deptname FROM course JOIN department ON department.deptcode = course.deptcode"
+      "SELECT courseid, coursename, course.deptcode, credits, deptname FROM course JOIN department ON department.deptcode = course.deptcode ORDER BY courseid"
     );
     res.status(200).json({ data: response.rows, success: true });
   } catch (error) {
@@ -180,9 +180,7 @@ export async function updateCourse(req, res, next) {
 export async function deleteCourse(req, res, next) {
   const id = req.params.id;
   try {
-    const response = await db.query("DELETE FROM course WHERE courseid = $1", [
-      id,
-    ]);
+    await db.query("DELETE FROM course WHERE courseid = $1", [id]);
     res
       .status(200)
       .json({ message: "Course deleted successfully", success: true });
@@ -194,7 +192,7 @@ export async function deleteCourse(req, res, next) {
 export async function getStudents(req, res, next) {
   try {
     const response = await db.query(
-      "SELECT fullname, rollno, email, mobile, address, gender, dob, sem, joinyear, students.deptcode, deptname FROM students JOIN department ON department.deptcode = students.deptcode;"
+      "SELECT fullname, rollno, email, mobile, address, gender, dob, sem, joinyear, students.deptcode, deptname FROM students JOIN department ON department.deptcode = students.deptcode ORDER BY rollno"
     );
     res.status(200).json({ data: response.rows, success: true });
   } catch (error) {
@@ -348,12 +346,271 @@ export async function updateStudent(req, res, next) {
 export async function deleteStudent(req, res, next) {
   const id = req.params.id;
   try {
-    const response = await db.query("DELETE FROM students WHERE rollno = $1", [
-      Number(id),
-    ]);
+    await db.query("DELETE FROM students WHERE rollno = $1", [Number(id)]);
     res
       .status(200)
       .json({ message: "Student deleted successfully", success: true });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getStaffs(req, res, next) {
+  try {
+    const response = await db.query(
+      "SELECT fullname, staffid, email, mobile, gender, designation, highest_qualification, joindate, staff.deptcode, deptname FROM staff JOIN department ON department.deptcode = staff.deptcode ORDER BY staffid"
+    );
+    res.status(200).json({ data: response.rows, success: true });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function addStaff(req, res, next) {
+  const {
+    fullname,
+    staffid,
+    email,
+    mobile,
+    designation,
+    password,
+    gender,
+    joindate,
+    highest_qualification,
+    deptcode,
+  } = req.body;
+  const validPwd = PWD_REGEX.test(password);
+  const validEmail = EMAIL_REGEX.test(email);
+  const validMob = MOB_REGEX.test(mobile);
+  const validSId = SID_REGEX.test(staffid);
+  if (
+    !fullname.trim() ||
+    !String(joindate).trim() ||
+    !validPwd ||
+    !validMob ||
+    !validSId ||
+    !validEmail ||
+    !designation.trim() ||
+    !highest_qualification.trim() ||
+    !String(deptcode).trim()
+  )
+    return next(errorHandler(422, "Please provide all values properly"));
+  try {
+    const hashedPassword = bcryptjs.hashSync(password, 10);
+    await db.query(
+      "INSERT INTO staff(staffid, fullname, gender, joindate, email, designation, mobile, password, deptcode, highest_qualification) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
+      [
+        Number(staffid),
+        fullname,
+        gender,
+        joindate,
+        email,
+        designation,
+        mobile,
+        hashedPassword,
+        Number(deptcode),
+        highest_qualification,
+      ]
+    );
+    res
+      .status(200)
+      .json({ success: true, message: "Staff added successfully!" });
+  } catch (error) {
+    if (
+      error?.detail?.includes("already exists") &&
+      error?.detail?.includes("staffid")
+    )
+      return next(errorHandler(409, "Staff Id already exists."));
+    if (
+      error?.detail?.includes("already exists") &&
+      error?.detail?.includes("email")
+    )
+      return next(errorHandler(409, "Email already exists."));
+
+    if (
+      error?.detail?.includes("already exists") &&
+      error?.detail?.includes("mobile")
+    )
+      return next(errorHandler(409, "Mobile Number already exists."));
+    next(error);
+  }
+}
+
+export async function updateStaff(req, res, next) {
+  const id = req.params.id;
+  const {
+    fullname,
+    staffid,
+    email,
+    mobile,
+    designation,
+    gender,
+    joindate,
+    highest_qualification,
+    deptcode,
+  } = req.body;
+  const validEmail = EMAIL_REGEX.test(email);
+  const validMob = MOB_REGEX.test(mobile);
+  const validSId = SID_REGEX.test(staffid);
+  if (
+    !fullname.trim() ||
+    !String(joindate).trim() ||
+    !validMob ||
+    !validSId ||
+    !validEmail ||
+    !designation.trim() ||
+    !highest_qualification.trim() ||
+    !String(deptcode).trim()
+  )
+    return next(errorHandler(422, "Please provide all values properly"));
+  try {
+    await db.query(
+      "UPDATE staff set staffid = $1, fullname = $2, gender = $3, joindate = $4, email = $5, designation = $6, mobile = $7,  deptcode = $8, highest_qualification = $9 WHERE staffid = $10",
+      [
+        Number(staffid),
+        fullname,
+        gender,
+        joindate,
+        email,
+        designation,
+        mobile,
+        Number(deptcode),
+        highest_qualification,
+        id,
+      ]
+    );
+    res
+      .status(200)
+      .json({ success: true, message: "Staff updated successfully!" });
+  } catch (error) {
+    if (
+      error?.detail?.includes("already exists") &&
+      error?.detail?.includes("staffid")
+    )
+      return next(errorHandler(409, "Staff Id already exists."));
+    if (
+      error?.detail?.includes("already exists") &&
+      error?.detail?.includes("email")
+    )
+      return next(errorHandler(409, "Email already exists."));
+
+    if (
+      error?.detail?.includes("already exists") &&
+      error?.detail?.includes("mobile")
+    )
+      return next(errorHandler(409, "Mobile Number already exists."));
+    next(error);
+  }
+}
+
+export async function deleteStaff(req, res, next) {
+  const id = req.params.id;
+  try {
+    await db.query("DELETE FROM staff WHERE staffid = $1", [Number(id)]);
+    res
+      .status(200)
+      .json({ message: "Staff deleted successfully", success: true });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getTeaches(req, res, next) {
+  try {
+    const response = await db.query(
+      "SELECT teaches.staffid, staff.fullname, teaches.courseid, course.coursename, teaches.sem, teaches.year, teaches.deptcode, department.deptname FROM teaches JOIN department on department.deptcode = teaches.deptcode JOIN course ON course.courseid = teaches.courseid JOIN staff ON staff.staffid = teaches.staffid ORDER BY staffid"
+    );
+    res.status(200).json({ data: response.rows, success: true });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function addTeaches(req, res, next) {
+  const { staffid, courseid, deptcode, sem, year } = req.body;
+  const validSem = sem ? Number(sem) >= 1 && Number(sem) <= 8 : false;
+  const validSId = SID_REGEX.test(staffid);
+  const validYear =
+    Number(year) > 2000 && Number(year) <= new Date().getFullYear();
+  if (
+    !courseid.trim() ||
+    !validSId ||
+    !validSem ||
+    !validYear ||
+    !String(deptcode).trim()
+  )
+    return next(errorHandler(422, "Please provide all values properly"));
+  try {
+    await db.query(
+      "INSERT INTO teaches(staffid, courseid, sem, year, deptcode) VALUES ($1,$2,$3,$4,$5)",
+      [Number(staffid), courseid, Number(sem), Number(year), Number(deptcode)]
+    );
+    res
+      .status(200)
+      .json({ success: true, message: "Teaches added successfully!" });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function updateTeaches(req, res, next) {
+  const id = JSON.parse(req.params.id);
+  const { staffid, courseid, deptcode, sem, year } = req.body;
+  const {
+    staffid: oldStaffId,
+    courseid: OldCourseId,
+    deptcode: oldDeptcode,
+    sem: oldSem,
+    year: oldYear,
+  } = id;
+
+  const validSem = sem ? Number(sem) >= 1 && Number(sem) <= 8 : false;
+  const validSId = SID_REGEX.test(staffid);
+  const validYear =
+    Number(year) > 2000 && Number(year) <= new Date().getFullYear();
+  if (
+    !courseid.trim() ||
+    !validSId ||
+    !validSem ||
+    !validYear ||
+    !String(deptcode).trim()
+  )
+    return next(errorHandler(422, "Please provide all values properly"));
+  try {
+    await db.query(
+      "UPDATE teaches SET staffid = $1, courseid = $2, sem = $3, year = $4, deptcode = $5 WHERE staffid = $6 AND courseid = $7 AND sem = $8 AND year = $9 AND deptcode = $10",
+      [
+        Number(staffid),
+        courseid,
+        Number(sem),
+        Number(year),
+        Number(deptcode),
+        Number(oldStaffId),
+        OldCourseId,
+        Number(oldSem),
+        Number(oldYear),
+        Number(oldDeptcode),
+      ]
+    );
+    res
+      .status(200)
+      .json({ success: true, message: "Teaches updated successfully!" });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function deleteTeaches(req, res, next) {
+  const id = JSON.parse(req.params.id);
+  const { staffid, courseid, deptcode, sem, year } = id;
+  try {
+    await db.query(
+      "DELETE FROM teaches WHERE staffid = $1 AND courseid = $2 AND sem = $3 AND year = $4 AND deptcode = $5",
+      [Number(staffid), courseid, Number(sem), Number(year), Number(deptcode)]
+    );
+    res
+      .status(200)
+      .json({ message: "Teaches deleted successfully", success: true });
   } catch (error) {
     next(error);
   }

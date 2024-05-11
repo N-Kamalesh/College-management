@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
-import CourseList from "./CourseList";
+import TeachesList from "./TeachesList";
 import axios from "axios";
 import Spinner from "../../Spinner";
 import { useSelector } from "react-redux";
-import CourseNew from "./CourseNew";
+import TeachesNew from "./TeachesNew";
 import { AnimatePresence, motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import DialogBox from "../../DialogBox";
-import CourseEdit from "./CourseEdit";
-import CourseTab from "./CourseTab";
+import TeachesEdit from "./TeachesEdit";
+import TeachesTab from "./TeachesTab";
 import { extractUniqueDepartments } from "../../../constants/utils";
 
 const { VITE_BASE_URL } = import.meta.env;
-function Course() {
+function Teaches() {
   const [selectedId, setSelectedId] = useState(null);
-  const [courses, setCourses] = useState([]);
+  const [teachess, setTeachess] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [mode, setMode] = useState("list");
@@ -26,24 +26,30 @@ function Course() {
     message: "",
     isVisible: false,
   });
-  const course = courses.find((course) =>
-    selectedId ? course.courseid === selectedId : false
+  const departments = extractUniqueDepartments(teachess);
+  const teaches = teachess.find((teaches) =>
+    selectedId
+      ? teaches.staffid === Number(selectedId.staffid) &&
+        teaches.courseid === selectedId.courseid &&
+        teaches.deptcode === Number(selectedId.deptcode) &&
+        teaches.sem === Number(selectedId.sem) &&
+        teaches.year === Number(teaches.year)
+      : false
   );
-  const departments = extractUniqueDepartments(courses);
 
-  const sortedCourses =
+  const sortedTeachess =
     sortBy === "all"
-      ? courses
-      : courses.filter((course) => course.deptcode === Number(sortBy));
+      ? teachess
+      : teachess.filter((teaches) => teaches.deptcode === Number(sortBy));
 
-  const searchedCourses =
+  const searchedTeachess =
     searchQuery.length > 0
-      ? sortedCourses.filter((course) =>
-          `${course.courseid} ${course.coursename}`
+      ? sortedTeachess.filter((teaches) =>
+          `${teaches.staffid} ${teaches.fullname} ${teaches.courseid} ${teaches.coursename}`
             .toLowerCase()
             .includes(searchQuery.toLowerCase())
         )
-      : sortedCourses;
+      : sortedTeachess;
 
   function onAdd() {
     setMode("new");
@@ -54,16 +60,16 @@ function Course() {
     setSelectedId(null);
   }
 
-  function handleClick(id) {
+  function handleClick(data) {
     setMode("view");
-    setSelectedId(id);
+    setSelectedId(data);
   }
 
   async function handleAdd(data) {
     try {
       setIsLoading(true);
       const response = await axios.post(
-        `${VITE_BASE_URL}/admin/course/add`,
+        `${VITE_BASE_URL}/admin/teaches/add`,
         data,
         {
           headers: {
@@ -92,7 +98,7 @@ function Course() {
     setSelectedId(id);
     setDialog((dialog) => ({
       ...dialog,
-      message: "Are you sure you want to delete this course?",
+      message: "Are you sure you want to delete this teaches?",
       isVisible: true,
     }));
   }
@@ -100,9 +106,10 @@ function Course() {
   async function handleDelete(res) {
     if (res) {
       try {
+        const id = JSON.stringify(selectedId);
         setIsLoading(true);
         const response = await axios.delete(
-          `${VITE_BASE_URL}/admin/course/${selectedId}`,
+          `${VITE_BASE_URL}/admin/teaches/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -137,8 +144,9 @@ function Course() {
   async function handleEdit(data) {
     try {
       setIsLoading(true);
+      const id = JSON.stringify(selectedId);
       const response = await axios.put(
-        `${VITE_BASE_URL}/admin/course/${selectedId}`,
+        `${VITE_BASE_URL}/admin/teaches/${id}`,
         data,
         {
           headers: {
@@ -166,17 +174,17 @@ function Course() {
 
   useEffect(
     function () {
-      async function fetchCourses() {
+      async function fetchTeachess() {
         try {
           setIsLoading(true);
-          const response = await axios.get(`${VITE_BASE_URL}/admin/course`, {
+          const response = await axios.get(`${VITE_BASE_URL}/admin/teaches`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
           console.log(response);
           if (response.data.success) {
-            setCourses(response.data.data);
+            setTeachess(response.data.data);
             console.log("Fetching Success");
           } else {
             setError(response.data.message);
@@ -190,7 +198,7 @@ function Course() {
           setIsLoading(false);
         }
       }
-      if (mode === "list" && selectedId === null) fetchCourses();
+      if (mode === "list" && selectedId === null) fetchTeachess();
     },
     [token, mode, selectedId]
   );
@@ -207,7 +215,7 @@ function Course() {
   return (
     <main className="relative w-full min-h-screen flex flex-col items-center">
       <h1 className="text-lg md:text-2xl text-indigo-800 font-bold  py-4">
-        Courses
+        Teaches
       </h1>
       <AnimatePresence>
         {error && (
@@ -235,27 +243,27 @@ function Course() {
       </AnimatePresence>
       {isLoading && <Spinner />}
       {!isLoading && mode === "list" && (
-        <CourseList
-          courses={searchedCourses}
+        <TeachesList
+          teachess={searchedTeachess}
           onAdd={onAdd}
+          sortBy={sortBy}
+          searchQuery={searchQuery}
+          setSortBy={setSortBy}
+          setSearchQuery={setSearchQuery}
           handleEditClick={handleEditClick}
           handleDeleteClick={handleDeleteClick}
           handleClick={handleClick}
-          sortBy={sortBy}
-          setSortBy={setSortBy}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
           departments={departments}
         />
       )}
       {!isLoading && mode === "new" && (
-        <CourseNew onBack={onBack} onSubmit={handleAdd} />
+        <TeachesNew onBack={onBack} onSubmit={handleAdd} />
       )}
       {!isLoading && mode === "view" && (
-        <CourseTab onBack={onBack} course={course} />
+        <TeachesTab onBack={onBack} teaches={teaches} />
       )}
       {!isLoading && mode === "update" && (
-        <CourseEdit onBack={onBack} course={course} onSubmit={handleEdit} />
+        <TeachesEdit onBack={onBack} teaches={teaches} onSubmit={handleEdit} />
       )}
       {dialog.isVisible && (
         <DialogBox message={dialog.message} onDialog={handleDelete} />
@@ -264,4 +272,4 @@ function Course() {
   );
 }
 
-export default Course;
+export default Teaches;

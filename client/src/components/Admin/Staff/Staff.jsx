@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
-import CourseList from "./CourseList";
+import StaffList from "./StaffList";
 import axios from "axios";
 import Spinner from "../../Spinner";
 import { useSelector } from "react-redux";
-import CourseNew from "./CourseNew";
+import StaffNew from "./StaffNew";
 import { AnimatePresence, motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import DialogBox from "../../DialogBox";
-import CourseEdit from "./CourseEdit";
-import CourseTab from "./CourseTab";
+import StaffEdit from "./StaffEdit";
+import StaffTab from "./StaffTab";
 import { extractUniqueDepartments } from "../../../constants/utils";
 
 const { VITE_BASE_URL } = import.meta.env;
-function Course() {
+function Staff() {
   const [selectedId, setSelectedId] = useState(null);
-  const [courses, setCourses] = useState([]);
+  const [staffs, setStaffs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [mode, setMode] = useState("list");
@@ -26,24 +26,24 @@ function Course() {
     message: "",
     isVisible: false,
   });
-  const course = courses.find((course) =>
-    selectedId ? course.courseid === selectedId : false
+  const departments = extractUniqueDepartments(staffs);
+  const staff = staffs.find((staff) =>
+    selectedId ? staff.staffid === selectedId : false
   );
-  const departments = extractUniqueDepartments(courses);
 
-  const sortedCourses =
+  const sortedStaffs =
     sortBy === "all"
-      ? courses
-      : courses.filter((course) => course.deptcode === Number(sortBy));
+      ? staffs
+      : staffs.filter((staff) => staff.deptcode === Number(sortBy));
 
-  const searchedCourses =
+  const searchedStaffs =
     searchQuery.length > 0
-      ? sortedCourses.filter((course) =>
-          `${course.courseid} ${course.coursename}`
+      ? sortedStaffs.filter((staff) =>
+          `${staff.staffid} ${staff.fullname}`
             .toLowerCase()
             .includes(searchQuery.toLowerCase())
         )
-      : sortedCourses;
+      : sortedStaffs;
 
   function onAdd() {
     setMode("new");
@@ -63,7 +63,7 @@ function Course() {
     try {
       setIsLoading(true);
       const response = await axios.post(
-        `${VITE_BASE_URL}/admin/course/add`,
+        `${VITE_BASE_URL}/admin/staff/add`,
         data,
         {
           headers: {
@@ -92,7 +92,7 @@ function Course() {
     setSelectedId(id);
     setDialog((dialog) => ({
       ...dialog,
-      message: "Are you sure you want to delete this course?",
+      message: "Are you sure you want to delete this staff?",
       isVisible: true,
     }));
   }
@@ -102,7 +102,7 @@ function Course() {
       try {
         setIsLoading(true);
         const response = await axios.delete(
-          `${VITE_BASE_URL}/admin/course/${selectedId}`,
+          `${VITE_BASE_URL}/admin/staff/${selectedId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -138,7 +138,7 @@ function Course() {
     try {
       setIsLoading(true);
       const response = await axios.put(
-        `${VITE_BASE_URL}/admin/course/${selectedId}`,
+        `${VITE_BASE_URL}/admin/staff/${selectedId}`,
         data,
         {
           headers: {
@@ -166,17 +166,17 @@ function Course() {
 
   useEffect(
     function () {
-      async function fetchCourses() {
+      async function fetchStaffs() {
         try {
           setIsLoading(true);
-          const response = await axios.get(`${VITE_BASE_URL}/admin/course`, {
+          const response = await axios.get(`${VITE_BASE_URL}/admin/staff`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
           console.log(response);
           if (response.data.success) {
-            setCourses(response.data.data);
+            setStaffs(response.data.data);
             console.log("Fetching Success");
           } else {
             setError(response.data.message);
@@ -190,7 +190,7 @@ function Course() {
           setIsLoading(false);
         }
       }
-      if (mode === "list" && selectedId === null) fetchCourses();
+      if (mode === "list" && selectedId === null) fetchStaffs();
     },
     [token, mode, selectedId]
   );
@@ -207,7 +207,7 @@ function Course() {
   return (
     <main className="relative w-full min-h-screen flex flex-col items-center">
       <h1 className="text-lg md:text-2xl text-indigo-800 font-bold  py-4">
-        Courses
+        Staffs
       </h1>
       <AnimatePresence>
         {error && (
@@ -235,27 +235,27 @@ function Course() {
       </AnimatePresence>
       {isLoading && <Spinner />}
       {!isLoading && mode === "list" && (
-        <CourseList
-          courses={searchedCourses}
+        <StaffList
+          staffs={searchedStaffs}
           onAdd={onAdd}
+          sortBy={sortBy}
+          searchQuery={searchQuery}
+          setSortBy={setSortBy}
+          setSearchQuery={setSearchQuery}
           handleEditClick={handleEditClick}
           handleDeleteClick={handleDeleteClick}
           handleClick={handleClick}
-          sortBy={sortBy}
-          setSortBy={setSortBy}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
           departments={departments}
         />
       )}
       {!isLoading && mode === "new" && (
-        <CourseNew onBack={onBack} onSubmit={handleAdd} />
+        <StaffNew onBack={onBack} onSubmit={handleAdd} />
       )}
       {!isLoading && mode === "view" && (
-        <CourseTab onBack={onBack} course={course} />
+        <StaffTab onBack={onBack} staff={staff} />
       )}
       {!isLoading && mode === "update" && (
-        <CourseEdit onBack={onBack} course={course} onSubmit={handleEdit} />
+        <StaffEdit onBack={onBack} staff={staff} onSubmit={handleEdit} />
       )}
       {dialog.isVisible && (
         <DialogBox message={dialog.message} onDialog={handleDelete} />
@@ -264,4 +264,4 @@ function Course() {
   );
 }
 
-export default Course;
+export default Staff;

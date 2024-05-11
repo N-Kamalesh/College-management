@@ -11,6 +11,7 @@ import Course from "./components/Admin/Courses/Course";
 import Student from "./components/Admin/Student/Student";
 import Staff from "./components/Admin/Staff/Staff";
 import Teaches from "./components/Admin/Teaches/Teaches";
+import Takes from "./components/Admin/Takes/Takes";
 const HomePage = lazy(() => import("./pages/Homepage"));
 const StudentLogin = lazy(() => import("./pages/StudentLogin"));
 const StaffLogin = lazy(() => import("./pages/StaffLogin"));
@@ -74,6 +75,7 @@ function App() {
               <Route path="student" element={<Student />} />
               <Route path="staff" element={<Staff />} />
               <Route path="teaches" element={<Teaches />} />
+              <Route path="takes" element={<Takes />} />
               <Route path="announcement" element={<Announcement />} />
               <Route path="course" element={<Course />} />
               <Route path="department" element={<Department />} />

@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
-import TeachesList from "./TeachesList";
+import TakesList from "./TakesList";
 import axios from "axios";
 import Spinner from "../../Spinner";
 import { useSelector } from "react-redux";
-import TeachesNew from "./TeachesNew";
+import TakesNew from "./TakesNew";
 import { AnimatePresence, motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import DialogBox from "../../DialogBox";
-import TeachesEdit from "./TeachesEdit";
-import TeachesTab from "./TeachesTab";
+import TakesEdit from "./TakesEdit";
+import TakesTab from "./TakesTab";
 import { extractUniqueDepartments } from "../../../constants/utils";
 
 const { VITE_BASE_URL } = import.meta.env;
-function Teaches() {
+function Takes() {
   const [selectedId, setSelectedId] = useState(null);
-  const [teachess, setTeachess] = useState([]);
+  const [takess, setTakess] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [mode, setMode] = useState("list");
@@ -26,30 +26,30 @@ function Teaches() {
     message: "",
     isVisible: false,
   });
-  const departments = extractUniqueDepartments(teachess);
-  const teaches = teachess.find((teaches) =>
+  const departments = extractUniqueDepartments(takess);
+  const takes = takess.find((takes) =>
     selectedId
-      ? teaches.staffid === Number(selectedId.staffid) &&
-        teaches.courseid === selectedId.courseid &&
-        teaches.deptcode === Number(selectedId.deptcode) &&
-        teaches.sem === Number(selectedId.sem) &&
-        teaches.year === Number(teaches.year)
+      ? takes.staffid === Number(selectedId.staffid) &&
+        takes.courseid === selectedId.courseid &&
+        takes.rollno === Number(selectedId.rollno) &&
+        takes.sem === Number(selectedId.sem) &&
+        takes.year === Number(takes.year)
       : false
   );
 
-  const sortedTeachess =
+  const sortedTakess =
     sortBy === "all"
-      ? teachess
-      : teachess.filter((teaches) => teaches.deptcode === Number(sortBy));
+      ? takess
+      : takess.filter((takes) => takes.deptcode === Number(sortBy));
 
-  const searchedTeachess =
+  const searchedTakess =
     searchQuery.length > 0
-      ? sortedTeachess.filter((teaches) =>
-          `${teaches.staffid} ${teaches.fullname} ${teaches.courseid} ${teaches.coursename} ${teaches.year}`
+      ? sortedTakess.filter((takes) =>
+          `${takes.staffid} ${takes.studentname} ${takes.courseid} ${takes.coursename} ${takes.rollno} ${takes.staffname} ${takes.year}`
             .toLowerCase()
             .includes(searchQuery.toLowerCase())
         )
-      : sortedTeachess;
+      : sortedTakess;
 
   function onAdd() {
     setMode("new");
@@ -69,7 +69,7 @@ function Teaches() {
     try {
       setIsLoading(true);
       const response = await axios.post(
-        `${VITE_BASE_URL}/admin/teaches/add`,
+        `${VITE_BASE_URL}/admin/takes/add`,
         data,
         {
           headers: {
@@ -98,7 +98,7 @@ function Teaches() {
     setSelectedId(id);
     setDialog((dialog) => ({
       ...dialog,
-      message: "Are you sure you want to delete this teaches?",
+      message: "Are you sure you want to delete this takes?",
       isVisible: true,
     }));
   }
@@ -109,7 +109,7 @@ function Teaches() {
         const id = JSON.stringify(selectedId);
         setIsLoading(true);
         const response = await axios.delete(
-          `${VITE_BASE_URL}/admin/teaches/${id}`,
+          `${VITE_BASE_URL}/admin/takes/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -146,7 +146,7 @@ function Teaches() {
       setIsLoading(true);
       const id = JSON.stringify(selectedId);
       const response = await axios.put(
-        `${VITE_BASE_URL}/admin/teaches/${id}`,
+        `${VITE_BASE_URL}/admin/takes/${id}`,
         data,
         {
           headers: {
@@ -174,17 +174,17 @@ function Teaches() {
 
   useEffect(
     function () {
-      async function fetchTeachess() {
+      async function fetchTakess() {
         try {
           setIsLoading(true);
-          const response = await axios.get(`${VITE_BASE_URL}/admin/teaches`, {
+          const response = await axios.get(`${VITE_BASE_URL}/admin/takes`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
           console.log(response);
           if (response.data.success) {
-            setTeachess(response.data.data);
+            setTakess(response.data.data);
             console.log("Fetching Success");
           } else {
             setError(response.data.message);
@@ -198,7 +198,7 @@ function Teaches() {
           setIsLoading(false);
         }
       }
-      if (mode === "list" && selectedId === null) fetchTeachess();
+      if (mode === "list" && selectedId === null) fetchTakess();
     },
     [token, mode, selectedId]
   );
@@ -215,7 +215,7 @@ function Teaches() {
   return (
     <main className="relative w-full min-h-screen flex flex-col items-center">
       <h1 className="text-lg md:text-2xl text-indigo-800 font-bold  py-4">
-        Teaches
+        Takes
       </h1>
       <AnimatePresence>
         {error && (
@@ -243,8 +243,8 @@ function Teaches() {
       </AnimatePresence>
       {isLoading && <Spinner />}
       {!isLoading && mode === "list" && (
-        <TeachesList
-          teachess={searchedTeachess}
+        <TakesList
+          takess={searchedTakess}
           onAdd={onAdd}
           sortBy={sortBy}
           searchQuery={searchQuery}
@@ -257,13 +257,13 @@ function Teaches() {
         />
       )}
       {!isLoading && mode === "new" && (
-        <TeachesNew onBack={onBack} onSubmit={handleAdd} />
+        <TakesNew onBack={onBack} onSubmit={handleAdd} />
       )}
       {!isLoading && mode === "view" && (
-        <TeachesTab onBack={onBack} teaches={teaches} />
+        <TakesTab onBack={onBack} takes={takes} />
       )}
       {!isLoading && mode === "update" && (
-        <TeachesEdit onBack={onBack} teaches={teaches} onSubmit={handleEdit} />
+        <TakesEdit onBack={onBack} takes={takes} onSubmit={handleEdit} />
       )}
       {dialog.isVisible && (
         <DialogBox message={dialog.message} onDialog={handleDelete} />
@@ -272,4 +272,4 @@ function Teaches() {
   );
 }
 
-export default Teaches;
+export default Takes;

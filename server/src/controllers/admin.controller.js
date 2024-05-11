@@ -615,3 +615,94 @@ export async function deleteTeaches(req, res, next) {
     next(error);
   }
 }
+
+export async function getTakes(req, res, next) {
+  try {
+    const response = await db.query(
+      "SELECT takes.rollno, students.fullname studentname, takes.staffid, staff.fullname staffname, takes.courseid, course.coursename, takes.sem, takes.year, students.deptcode, department.deptname FROM takes JOIN students ON takes.rollno = students.rollno JOIN department ON department.deptcode = students.deptcode JOIN course ON course.courseid = takes.courseid JOIN staff ON staff.staffid = takes.staffid ORDER BY takes.rollno"
+    );
+    res.status(200).json({ data: response.rows, success: true });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function addTakes(req, res, next) {
+  const { staffid, courseid, rollno, sem, year } = req.body;
+  const validSem = sem ? Number(sem) >= 1 && Number(sem) <= 8 : false;
+  const validSId = SID_REGEX.test(staffid);
+  const validYear =
+    Number(year) > 2000 && Number(year) <= new Date().getFullYear();
+  const validRno = RNO_REGEX.test(rollno);
+  if (!courseid.trim() || !validSId || !validSem || !validYear || !validRno)
+    return next(errorHandler(422, "Please provide all values properly"));
+  try {
+    await db.query(
+      "INSERT INTO takes(staffid, courseid, sem, year, rollno) VALUES ($1,$2,$3,$4,$5)",
+      [Number(staffid), courseid, Number(sem), Number(year), Number(rollno)]
+    );
+    res
+      .status(200)
+      .json({ success: true, message: "Takes added successfully!" });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function updateTakes(req, res, next) {
+  const id = JSON.parse(req.params.id);
+  const { staffid, courseid, rollno, sem, year } = req.body;
+  const {
+    staffid: oldStaffId,
+    courseid: OldCourseId,
+    rollno: oldRollno,
+    sem: oldSem,
+    year: oldYear,
+  } = id;
+
+  const validSem = sem ? Number(sem) >= 1 && Number(sem) <= 8 : false;
+  const validSId = SID_REGEX.test(staffid);
+  const validYear =
+    Number(year) > 2000 && Number(year) <= new Date().getFullYear();
+  const validRno = RNO_REGEX.test(rollno);
+  if (!courseid.trim() || !validSId || !validSem || !validYear || !validRno)
+    return next(errorHandler(422, "Please provide all values properly"));
+  try {
+    await db.query(
+      "UPDATE takes SET staffid = $1, courseid = $2, sem = $3, year = $4, rollno = $5 WHERE staffid = $6 AND courseid = $7 AND sem = $8 AND year = $9 AND rollno = $10",
+      [
+        Number(staffid),
+        courseid,
+        Number(sem),
+        Number(year),
+        Number(rollno),
+        Number(oldStaffId),
+        OldCourseId,
+        Number(oldSem),
+        Number(oldYear),
+        Number(oldRollno),
+      ]
+    );
+    res
+      .status(200)
+      .json({ success: true, message: "Takes updated successfully!" });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function deleteTakes(req, res, next) {
+  const id = JSON.parse(req.params.id);
+  const { staffid, courseid, rollno, sem, year } = id;
+  try {
+    await db.query(
+      "DELETE FROM takes WHERE staffid = $1 AND courseid = $2 AND sem = $3 AND year = $4 AND rollno = $5",
+      [Number(staffid), courseid, Number(sem), Number(year), Number(rollno)]
+    );
+    res
+      .status(200)
+      .json({ message: "Takes deleted successfully", success: true });
+  } catch (error) {
+    next(error);
+  }
+}

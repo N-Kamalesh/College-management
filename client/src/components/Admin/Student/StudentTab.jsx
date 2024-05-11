@@ -31,6 +31,10 @@ function StudentTab({ student, onBack }) {
           {student.gender === "M" ? "Male" : "Female"}
         </p>
         <p className=" text-md md:text-lg">
+          <span className="text-indigo-900 font-semibold">Address: </span>
+          {student.address}
+        </p>
+        <p className=" text-md md:text-lg">
           <span className="text-indigo-900 font-semibold">Date of birth: </span>
           {new Date(student.dob).toLocaleDateString("en-US", dateOptions)}
         </p>

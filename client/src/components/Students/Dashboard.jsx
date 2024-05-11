@@ -36,7 +36,7 @@ function Dashboard() {
             </div>
             <div className=' rounded-lg m-3   h-16  grid grid-cols-3 gap-0 '>
                   <div className='bg-slate-100 m-3 p-2 h-16  col-span-1    rounded-lg flex flex-col   justify-center items-center'>Address</div>
-                  <div className='bg-slate-100 m-3 p-2 h-16  text-sm col-span-2   rounded-lg flex flex-col justify-center items-center ' >324/234,ramasamy nagar,judge road bus stop, salem-8 </div>
+                  <div className='bg-slate-100 m-3 p-2 h-16  text-sm col-span-2   rounded-lg flex flex-col justify-center items-center ' >{user.address} </div>
             </div>          
             <div  className='  rounded-lg m-3   h-16  grid grid-cols-3 gap-0 '>
                     <div className='bg-slate-100 m-3 p-2 h-16  col-span-1 w-100   rounded-lg flex flex-col   justify-center items-center'>Department</div>

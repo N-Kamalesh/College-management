@@ -58,6 +58,36 @@ function StaffCourses(){
                 'deptcode': 200,
                 'coursename': 'computer science'
             },
+            {
+                'rollno':2000,
+                'fullname': "buddy",
+                'deptcode': 200,
+                'coursename': 'computer science'
+            },
+            {
+                'rollno':2001,
+                'fullname': "guy",
+                'deptcode': 200,
+                'coursename': 'dbms'
+            },
+            {
+                'rollno':2002,
+                'fullname': "person",
+                'deptcode': 202,
+                'coursename': 'data structures'
+            },
+            {
+                'rollno':2003,
+                'fullname': "another person",
+                'deptcode': 203,
+                'coursename': 'data structures'
+            },
+            {
+                'rollno':2004,
+                'fullname': "buddy",
+                'deptcode': 200,
+                'coursename': 'computer science'
+            },
         ]
     );
     const [isView, setIsView] = useState(false);
@@ -107,11 +137,18 @@ function StaffCourses(){
         try {
             const courseid = e.target.id;
             const staffid = user.staffid;
+            setFalseButton(e.target.id); //remove selected class from all buttons and add the class to the selected button
             const response = await axios.get(`${VITE_BASE_URL}/staff/courses?id=${staffid}&c_id=${courseid}`);
             setStudents(response);
         } catch (error) {
             console.log("Error in getStudents!");
         }
+    }
+    function setFalseButton(e){
+        for(let i = 0 ; i<courses.length; i++){
+            document.getElementById(courses[i].courseid).classList.remove("selected-button");
+        }
+        document.getElementById(e).classList.add("selected-button");
     }
     return (
         <div className="staff-course-outer w-screen">
@@ -120,7 +157,7 @@ function StaffCourses(){
                     (item) => <StaffCourseButton key={item.courseid} id={item.courseid} text={item.coursename} onClickHandler={getStudents} />
                 )}
             </div>
-            <ul className="staff-course-ul h-auto flex justify-center flex-col items-center my-20">
+            <ul className="staff-course-ul h-[80vh] flex flex-col items-center my-20 overflow-auto">
                 {students.map(
                     (item, index) => <StaffCourseListItem key={index} rollno={item.rollno} fullname={item.fullname} deptcode={item.deptcode} coursename ={item.coursename} />
                 )}

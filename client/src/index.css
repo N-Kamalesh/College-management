@@ -82,3 +82,6 @@ aside .active {
 .staff-course-li-div{
   height: 25px;
 }
+.selected-button{
+  background-color: #0b83a7;
+}

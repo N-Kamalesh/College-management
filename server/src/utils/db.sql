@@ -418,3 +418,159 @@ FOR EACH ROW
 EXECUTE FUNCTION check_teaches_sem_year_dept();
 
 
+
+
+-- export async function newFillTakes(req, res, next){                                                                                           
+--   const yearSem = [
+--       {
+--           sems: [1],
+--           year: 2020, //just started enrollment so, first semester alone will exist
+--       },
+--       {
+--           sems: [1, 2, 3], //new sem1 students, prev year sem2 students, after completing sem2 they will enter sem3 parallel with new sem1
+--           year: 2021,
+--       },
+--       {
+--           sems: [1, 2, 3, 4, 5],
+--           year: 2022,
+--       },
+--       {
+--           sems: [1, 2, 3, 4, 5, 6, 7],
+--           year: 2023,
+--       },
+--       {
+--           sems: [2, 4, 6, 8], //Odd sem not started yet
+--           year: 2024,
+--       }
+--   ];
+--   const depts = [
+--       {
+--           deptcode: 101,
+--           deptname: "Mechanical Engineering",
+--       },
+--       {
+--           deptcode: 102,
+--           deptname: "Information Technology",
+--       },
+--       {
+--           deptcode: 103,
+--           deptname: "Computer Science and Engineering",
+--       },
+--       {
+--           deptcode: 104,
+--           deptname: "Electrical and Electronics Engineering",
+--       },
+--       {
+--           deptcode: 105,
+--           deptname: "Electronics and Communication Engineering",
+--       },
+--       {
+--           deptcode: 106,
+--           deptname: "Civil Engineering",
+--       },
+--   ];
+--   const result = [];
+--   for( let i = 0; i < yearSem.length; i++){
+--       const year = yearSem[i].year;
+--       const sems = yearSem[i].sems;
+
+--       for( let j = 0; j < sems.length; j++){
+--           const sem = sems[j];
+--           const idInStaffs = [];
+--           for( let k = 0; k < depts.length; k++){
+--               const deptCode = depts[k].deptcode;
+--               const {rows: staffs} = await db.query("SELECT staffid FROM staff WHERE deptcode = $1", [deptCode]);
+--               const {rows: courses} = await db.query("SELECT courseid FROM course WHERE deptcode = $1 ORDER BY courseid", [deptCode]);
+--               const randStaffs = [];
+
+--               while(randStaffs.length < 10){
+--                   let index = Math.floor( Math.random() * staffs.length );
+--                   if( !idInStaffs.includes(staffs[index].staffid) ) {
+--                       randStaffs.push( staffs[index] );
+--                       idInStaffs.push( staffs[index].staffid);
+--                   }
+--               }
+
+--               let start = sem*6 - 6;
+--               let end = start + 6;
+
+--               const randCourses = courses.slice(start, end);
+
+--               for( let l = 0; l < 6; l++){
+--                   let randIndexStaff = Math.floor( Math.random() * randStaffs.length );
+--                   let randIndexCourse = Math.floor( Math.random() * randCourses.length );
+
+--                   const resObj = {
+--                       staffid: randStaffs[randIndexStaff].staffid,
+--                       courseid: randCourses[randIndexCourse].courseid,
+--                       year: year,
+--                       sem: sem,
+--                       deptcode: deptCode,
+--                   };
+
+--                   randCourses.splice(randIndexCourse, 1);
+--                   randStaffs.splice(randIndexStaff, 1);
+
+--                   result.push(resObj);
+--               }
+--           }
+--       }
+--   }
+--   result.forEach(async (res) =>{
+--     const {staffid,courseid,sem,year,deptcode} = res;
+--     try{
+--       await db.query("INSERT INTO teaches (staffid,courseid,sem,year,deptcode) VALUES ($1,$2,$3,$4,$5)",[staffid,courseid,sem,year,deptcode])
+--     }catch(error){
+--       console.log(error)
+--     }
+--   })
+-- }
+
+
+-- export async function newTakes(req,res,next){
+--   const {rows:students} = await db.query("SELECT rollno,deptcode,joinyear FROM students;");
+--   const {rows:teaches} = await db.query("SELECT * FROM teaches");
+--   const result = [];
+--   for(let i =0;i<students.length;i++){
+--     for(let j = 0; j<teaches.length;j++){
+--         let n = (teaches[j].year - students[i].joinyear) * 2;
+--         const studentSem =[n,n+1];
+--           if(teaches[j].deptcode === students[i].deptcode && studentSem.includes(teaches[j].sem)){
+--               const take = {
+--                   rollno:students[i].rollno,
+--                   courseid:teaches[j].courseid,
+--                   staffid:teaches[j].staffid,
+--                   year:teaches[j].year,
+--                   sem:teaches[j].sem
+--               }
+--               result.push(take)
+--           }
+--       }
+--   } 
+--       result.forEach(async (res) => {
+--         const {rollno,staffid,courseid,year,sem} = res;
+--         try{
+--           await db.query("INSERT INTO TAKES (rollno,staffid,courseid,year,sem) VALUES($1,$2,$3,$4,$5);",[rollno,staffid,courseid,year,sem]);
+--         }catch(error){
+--           console.log(error)
+--         }
+--       })
+
+--       res.send("Success")
+-- }
+
+-- export async function enterMarks(req,res,next){
+--   const {rows:marks} = await db.query("SELECT * FROM marks");
+--   for(let i = 0; i < marks.length ; i++){
+--       const internals = Math.ceil(Math.random() * 40 ) + 20;
+--       const attendance = Math.ceil(Math.random() * 27 ) + 73;
+--       const externals =   Math.ceil(Math.random() * 25 ) + Math.floor(attendance / 20 ) + Math.ceil(internals / 6) 
+--       try{
+--       await db.query("UPDATE marks set attendance = $1, internals = $2, externals = $3 WHERE rollno = $4 AND courseid = $5 AND year = $6 AND sem = $7",[attendance,internals,externals,marks[i].rollno,marks[i].courseid,marks[i].year,marks[i].sem]);
+--       console.log("No: ",i, "Values: ",attendance,internals,externals,marks[i].rollno,marks[i].courseid,marks[i].year,marks[i].sem) 
+--       }catch(error){
+--           console.log(error);
+--       }
+--   }
+--   res.send("Success");
+-- }

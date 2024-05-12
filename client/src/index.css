@@ -87,28 +87,28 @@ aside .active {
 }
 
 /*Flip Card*/
+.card-container {
+  perspective: 700px;
+}
+
 .card-content {
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  transition: transform 1s;
   transform-style: preserve-3d;
-  transition: transform 0.5s linear 1ms;
-
-}
-.card-front, .card-back {
-  backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-.card-front {
-  background-color: var(--first-color);
-}
-.card-back {
-  background-color: var(--second-color);
-  transform: rotateY(180deg);
 }
 
-.card-container::after {
-content: "";
-display: table;
-}
 .card-container:hover .card-content {
-transform: rotateY(180deg);
+  transform: rotateY( 180deg ) ;
+  transition: transform 0.8s;
+}
+
+.card-front,
+.card-back {
+  color: #fff;
+  position: absolute;
+  backface-visibility: hidden;
+}
+
+.card-back {
+  transform: rotateY( 180deg );
 }

@@ -29,11 +29,11 @@ function Teaches() {
   const departments = extractUniqueDepartments(teachess);
   const teaches = teachess.find((teaches) =>
     selectedId
-      ? teaches.staffid === Number(selectedId.staffid) &&
-        teaches.courseid === selectedId.courseid &&
-        teaches.deptcode === Number(selectedId.deptcode) &&
-        teaches.sem === Number(selectedId.sem) &&
-        teaches.year === Number(teaches.year)
+  ? (teaches.staffid === Number(selectedId.staffid) &&
+      teaches.year === Number(selectedId.year)&&
+      teaches.courseid === selectedId.courseid &&
+      teaches.deptcode === Number(selectedId.deptcode) &&
+      teaches.sem === Number(selectedId.sem) )
       : false
   );
 

@@ -118,6 +118,9 @@ INSERT INTO staff VALUES
 
 INSERT INTO admin VALUES('admin@gmail.com','$2a$10$RCylE1aD5h7SWWWXlG0X.uwpoKf.GK7XqTFMZARZcgnwWhXpmWfSy','Monish');
 
+ALTER TABLE public.staff
+ADD CONSTRAINT staff_deptcode_fkey FOREIGN KEY (deptcode)
+REFERENCES public.department(deptcode) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE public.students
 ADD CONSTRAINT students_deptcode_fkey FOREIGN KEY (deptcode)
@@ -341,18 +344,23 @@ DECLARE
     expected_sem integer;
 BEGIN
     -- Calculate the expected semester based on the joinyear and current year
-    expected_sem := (NEW.year - s.joinyear) * 2 + 1; -- Add 1 to the calculation
+    SELECT (NEW.year - joinyear) * 2 + 1 INTO expected_sem 
+    FROM students 
+    WHERE rollno = NEW.rollno;
 
     IF NEW.sem = expected_sem OR NEW.sem = expected_sem - 1 THEN
         IF EXISTS (
             SELECT 1
             FROM teaches t
-            JOIN students s ON NEW.rollno = s.rollno
             WHERE t.staffid = NEW.staffid
               AND t.courseid = NEW.courseid
               AND t.year = NEW.year
               AND t.sem = NEW.sem
-              AND s.deptcode = t.deptcode
+              AND t.deptcode = (
+                  SELECT deptcode 
+                  FROM students 
+                  WHERE rollno = NEW.rollno
+              )
         ) THEN
             RETURN NEW;
         ELSE
@@ -363,6 +371,7 @@ BEGIN
     END IF;
 END;
 $$ LANGUAGE plpgsql;
+
 
 CREATE OR REPLACE TRIGGER check_course_eligibility_trigger
 BEFORE INSERT ON takes

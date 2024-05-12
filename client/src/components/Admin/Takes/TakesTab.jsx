@@ -2,11 +2,11 @@ import { faCircleArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 
-TeachesTab.propTypes = {
-  teaches: PropTypes.object,
+TakesTab.propTypes = {
+  takes: PropTypes.object,
   onBack: PropTypes.func,
 };
-function TeachesTab({ teaches, onBack }) {
+function TakesTab({ takes, onBack }) {
   return (
     <article className="flex flex-col relative items-center gap-4 overflow-y-scroll h-[85vh] w-[90%] max-w-6xl p-4 border-2 border-indigo-800">
       <button
@@ -18,36 +18,44 @@ function TeachesTab({ teaches, onBack }) {
       </button>
       <div className="flex flex-col justify-center my-auto  gap-2 bg-gray-200  text-left p-8 rounded-md">
         <p className=" text-md md:text-lg">
+          <span className="text-indigo-900 font-semibold">Student Name: </span>
+          {takes.studentname}
+        </p>
+        <p className=" text-md md:text-lg">
+          <span className="text-indigo-900 font-semibold">Roll Number: </span>
+          {takes.rollno}
+        </p>
+        <p className=" text-md md:text-lg">
           <span className="text-indigo-900 font-semibold">Staff Name: </span>
-          {teaches.fullname}
+          {takes.staffname}
         </p>
         <p className=" text-md md:text-lg">
           <span className="text-indigo-900 font-semibold">Staff ID: </span>
-          {teaches.staffid}
+          {takes.staffid}
         </p>
         <p className=" text-md md:text-lg">
           <span className="text-indigo-900 font-semibold">Course name: </span>
-          {teaches.coursename}
+          {takes.coursename}
         </p>
         <p className=" text-md md:text-lg">
           <span className="text-indigo-900 font-semibold">Course ID: </span>
-          {teaches.courseid}
+          {takes.courseid}
         </p>
         <p className=" text-md md:text-lg">
           <span className="text-indigo-900 font-semibold">Sem: </span>
-          {teaches.sem}
+          {takes.sem}
         </p>
         <p className=" text-md md:text-lg">
           <span className="text-indigo-900 font-semibold">Year: </span>
-          {teaches.year}
+          {takes.year}
         </p>
         <p className=" text-md md:text-lg">
           <span className="text-indigo-900 font-semibold">Department: </span>
-          {teaches.deptname}
+          {takes.deptname}
         </p>
       </div>
     </article>
   );
 }
 
-export default TeachesTab;
+export default TakesTab;

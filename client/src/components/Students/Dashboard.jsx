@@ -1,47 +1,88 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import FlipCard from "./FlipCard";
 import axios from "axios";
+import Spinner from "../Spinner";
+import { AnimatePresence, motion } from "framer-motion";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 function Dashboard() {
   const { VITE_BASE_URL } = import.meta.env;
   const { user } = useSelector((state) => state.user);
-  const [courseInstructors, setCourseInstructors] = useState([
-    {
-      coursename: "newCourse",
-      fullname: "buddys instructor",
-      deptcode: 102,
-      designation: "phd in something",
-    },
-    {
-      coursename: "newCourse",
-      fullname: "buddys instructor",
-      deptcode: 102,
-      designation: "phd in something",
-    },
-  ]);
-  useEffect(function () {
-    async function fetchInstructors() {
-      try {
-        const response = await axios.get(
-          `${VITE_BASE_URL}/student/dashboard?rollno=${user.rollno}&sem=${user.sem}`
-        );
-        setCourseInstructors(response.data.data);
-        // console.log(response.data.data);
-      } catch (error) {
-        console.log("Error in fetchInstructions");
+  const [isLoading, setIsLoading] = useState(false);
+  const [courseInstructors, setCourseInstructors] = useState([]);
+  const [error, setError] = useState("");
+  useEffect(
+    function () {
+      async function fetchInstructors() {
+        try {
+          setIsLoading(true);
+          const response = await axios.get(
+            `${VITE_BASE_URL}/student/dashboard?rollno=${user.rollno}&sem=${user.sem}`
+          );
+          console.log(response);
+          if (response.data.success) {
+            setCourseInstructors(response.data.data);
+            console.log("Fetching Success");
+          } else {
+            setError(response.data.message);
+          }
+        } catch (error) {
+          console.log(error);
+          if (error?.response?.data?.message)
+            setError(error?.response?.data?.message);
+          else setError("Something went wrong! Please try again.");
+        } finally {
+          setIsLoading(false);
+        }
       }
-    }
-    fetchInstructors();
-  }, []);
-  // {"user":"{\"isAuthenticated\":true,\"user\":{\"rollno\":2022103512,\"email\":\"abinaya1510@gmail.com\",\"fullname\":\"Dev…
+      fetchInstructors();
+    },
+    [VITE_BASE_URL, user.rollno, user.sem]
+  );
+
+  useEffect(
+    function () {
+      setTimeout(() => {
+        setError("");
+      }, 10000);
+    },
+    [error]
+  );
+
+  if (isLoading) return <Spinner />;
   return (
-    <main className=" w-full min-h-screen break-all">
-      <h1 className="text-center pt-5 text-3xl">DASHBOARD</h1>
-      <div
-        div
-        className="bg-indigo-800 m-10 rounded-3xl py-4 lg:py-9  h-auto  grid grid-cols-1 gap-0  lg:grid-cols-2 text-center grid-rows-auto"
-      >
+    <main className=" w-full min-h-screen ">
+      {}
+      <h1 className="text-center pt-5 text-3xl text-indigo-800 font-bold">
+        Dashboard
+      </h1>
+      <AnimatePresence>
+        {error && (
+          <motion.p
+            initial={{
+              scale: 0,
+            }}
+            animate={{ scale: 1 }}
+            transition={{
+              duration: 1,
+              ease: "backInOut",
+            }}
+            exit={{
+              scale: 0,
+            }}
+            className="bg-red-500 font-sans text-white rounded-xl p-4 max-w-lg w-[90%] mx-auto mb-2"
+          >
+            <FontAwesomeIcon
+              icon={faCircleExclamation}
+              style={{ color: "white" }}
+            />{" "}
+            {error}
+          </motion.p>
+        )}
+      </AnimatePresence>
+      <div className="bg-indigo-800 m-10 rounded-3xl py-4 lg:py-9  h-auto  grid grid-cols-1 gap-0  lg:grid-cols-2 text-center grid-rows-auto">
         <div className=" rounded-lg ">
           <div className="  rounded-lg m-3 mt-0 max-[520px]:h-auto h-16 grid grid-cols-3 gap-0 max-[520px]:flex max-[520px]:flex-col">
             <div className="bg-slate-100  p-2 max-[520px]:h-auto m-3 h-16 col-span-1   rounded-lg flex flex-col   justify-center items-center">
@@ -59,15 +100,30 @@ function Dashboard() {
               {user.rollno}
             </div>
           </div>
-          <div
-            div
-            className=" rounded-lg m-3   max-[520px]:h-auto h-16  grid grid-cols-3 gap-0 max-[520px]:flex max-[520px]:flex-col"
-          >
+          <div className=" rounded-lg m-3   max-[520px]:h-auto h-16  grid grid-cols-3 gap-0 max-[520px]:flex max-[520px]:flex-col">
             <div className="bg-slate-100 m-3 p-2 max-[520px]:h-auto h-16 col-span-1   rounded-lg flex flex-col   justify-center items-center">
               Semester
             </div>
             <div className="bg-slate-100 m-3 max-[520px]:mt-0 p-2 max-[520px]:h-auto h-16 col-span-2   rounded-lg flex flex-col justify-center items-center max-[380px]:text-xs">
               {user.sem}
+            </div>
+          </div>
+          <div className="rounded-lg m-3   max-[520px]:h-auto h-16  grid grid-cols-3 gap-0 max-[520px]:flex max-[520px]:flex-col">
+            <div className="bg-slate-100 m-3  p-2 max-[520px]:h-auto h-16 col-span-1     rounded-lg flex flex-col   justify-center items-center">
+              Email id
+            </div>
+            <div className="bg-slate-100 m-3 max-[520px]:mt-0 p-2 max-[520px]:h-auto h-16 col-span-2   rounded-lg flex flex-col justify-center items-center max-[380px]:text-xs">
+              {user.email}
+            </div>
+          </div>
+        </div>
+        <div className=" rounded-lg   pb-2">
+          <div className="  rounded-lg  m-3 mt-0   max-[520px]:h-auto h-16  grid grid-cols-3 gap-0 max-[520px]:flex max-[520px]:flex-col">
+            <div className="bg-slate-100 m-3 p-2 max-[520px]:h-auto h-16  col-span-1    rounded-lg flex flex-col   justify-center items-center">
+              Mobile
+            </div>
+            <div className="bg-slate-100 m-3 max-[520px]:mt-0 p-2 max-[520px]:h-auto h-16 col-span-2   rounded-lg flex flex-col justify-center items-center max-[380px]:text-xs">
+              {user.mobile}
             </div>
           </div>
           <div className="  rounded-lg m-3   max-[520px]:h-auto h-16  grid grid-cols-3 gap-0 max-[520px]:flex max-[520px]:flex-col">
@@ -96,18 +152,26 @@ function Dashboard() {
           </div>
         </div>
       </div>
-      <h1 className="text-center pt-5 text-3xl">INSTRUCTORS</h1>
-      <div className=" m-10 flex shrink-0 h-auto py-4 px-4 overflow-x-auto justify-evenly">
-        {courseInstructors.map((item, index) => (
-          <FlipCard
-            key={index}
-            coursename={item.coursename}
-            deptcode={item.deptcode}
-            designation={item.designation}
-            fullname={item.fullname}
-          />
-        ))}
-      </div>
+      <h1 className="text-center font-semibold text-indigo-800 pt-5 text-2xl md:text-3xl">
+        Courses you&apos;re currently studying
+      </h1>
+      {courseInstructors.length === 0 ? (
+        <p className="text-center mt-4">
+          It seems like you&apos;re not enrolled in any courses currently
+        </p>
+      ) : (
+        <div className=" m-10 flex shrink-0 h-auto py-4 px-4 overflow-x-auto justify-evenly">
+          {courseInstructors.map((item, index) => (
+            <FlipCard
+              key={index}
+              coursename={item.coursename}
+              deptcode={item.deptcode}
+              designation={item.designation}
+              fullname={item.fullname}
+            />
+          ))}
+        </div>
+      )}
     </main>
   );
 }

@@ -33,7 +33,7 @@ function Teaches() {
         teaches.courseid === selectedId.courseid &&
         teaches.deptcode === Number(selectedId.deptcode) &&
         teaches.sem === Number(selectedId.sem) &&
-        teaches.year === Number(teaches.year)
+        teaches.year === Number(selectedId.year)
       : false
   );
 

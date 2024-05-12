@@ -81,7 +81,7 @@ function Dashboard() {
       </div>
       </div>
       <h1 className='text-center pt-5 text-3xl'>INSTRUCTORS</h1>
-      <div  className=' m-10 flex shrink-0 h-auto py-4 px-4 overflow-x-auto justify-between'>
+      <div  className=' m-10 flex shrink-0 h-auto py-4 px-4 overflow-x-auto justify-evenly'>
         {courseInstructors.map(
             (item, index) => <FlipCard key={index} coursename={item.coursename} deptcode={item.deptcode} designation={item.designation} fullname={item.fullname} />
         )}

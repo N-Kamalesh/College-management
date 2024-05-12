@@ -33,7 +33,7 @@ function Takes() {
         takes.courseid === selectedId.courseid &&
         takes.rollno === Number(selectedId.rollno) &&
         takes.sem === Number(selectedId.sem) &&
-        takes.year === Number(takes.year)
+        takes.year === Number(selectedId.year)
       : false
   );
 

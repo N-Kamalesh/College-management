@@ -60,6 +60,7 @@ export async function staffSignInController(req, res, next) {
 }
 
 export async function studentSignInController(req, res, next) {
+  console.log("Inside student controller");
   const { rollno, password } = req.body;
   try {
     const response = await db.query("SELECT * FROM students WHERE rollno=$1", [

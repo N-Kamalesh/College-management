@@ -8,6 +8,7 @@ import StudentDashboard from "./components/Students/Dashboard";
 import StudentMarks from "./components/Students/Marks";
 import StaffLayout from "./pages/StaffLayout";
 import StaffDashBoard from "./pages/StaffDashBoard";
+import StaffCourses from "./pages/StaffCourses";
 import Course from "./components/Admin/Courses/Course";
 import Student from "./components/Admin/Student/Student";
 import Staff from "./components/Admin/Staff/Staff";
@@ -60,6 +61,8 @@ function App() {
             >
               <Route index element={<Navigate replace to="dashboard" />} />
               <Route path="dashboard" element={<StaffDashBoard />} />
+              <Route index element = {<StaffDashBoard />} />
+              <Route path="course" element = {<StaffCourses />} />  
             </Route>
           </Route>
           <Route path="/admin" element={<Layout />}>

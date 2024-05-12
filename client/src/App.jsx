@@ -5,6 +5,7 @@ import AppLayout from "./pages/AppLayout";
 import Announcement from "./components/Admin/Announcement/Announcement";
 import Department from "./components/Admin/Department/Department";
 import StudentDashboard from "./components/Students/Dashboard";
+import StudentMarks from "./components/Students/Marks";
 import StaffLayout from "./pages/StaffLayout";
 import StaffDashBoard from "./pages/StaffDashBoard";
 import Course from "./components/Admin/Courses/Course";
@@ -43,6 +44,7 @@ function App() {
                 element={<Navigate replace to="dashboard" />}
               ></Route>
               <Route path="dashboard" element={<StudentDashboard />} />
+              <Route path="marks" element={<StudentMarks/>}/>
             </Route>
           </Route>
           <Route path="/staff" element={<Layout />}>

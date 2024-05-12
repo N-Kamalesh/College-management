@@ -6,9 +6,85 @@ import axios from 'axios';
 const { VITE_BASE_URL } = import.meta.env;
 
 function StaffCourses(){
-    const [courses, setCourses] = useState(
-        [
-            {
+    const [courses, setCourses] = useState([{}]);
+    const [students, setStudents] = useState([{}]);
+    const [isView, setIsView] = useState(false);
+    const { token, user } = useSelector((state) => state.user);
+
+    useEffect(
+        function () {
+            async function getStaffCourses(){
+                try {
+                    const response = await axios.get(`${VITE_BASE_URL}/staff/courses/course`);
+                    setCourses(response.data.data);
+                } catch (error) {
+                    console.log("Error in getting staff courses!");
+                }
+            }
+            async function createView(){
+                try {
+                    await axios.get(`${VITE_BASE_URL}/staff/courses/create?staffid=${user.staffid}`);
+                    setIsView(true);
+                } catch (error) {
+                    console.log("Error in creating view!",error);
+                    setIsView(false);
+                }
+            }
+            createView();
+            getStaffCourses();
+        },
+        [students]
+    );
+    useEffect(
+        function () {
+            async function getAllStudents(){
+                try {
+                    const response = await axios.get(`${VITE_BASE_URL}/staff/courses/all`);
+                    setStudents(response.data.data);
+                } catch (error) {
+                    console.log("Error in getAllStudents");
+                }
+            }
+            getAllStudents();
+        },
+        []
+    );
+    async function getStudents(e){
+        try {
+            const courseid = e.target.id;
+            setFalseButton(e.target.id); //remove selected class from all buttons and add the class to the selected button
+            const response = await axios.get(`${VITE_BASE_URL}/staff/courses?c_id=${courseid}`);
+            setStudents(response.data.data);
+        } catch (error) {
+            console.log("Error in getStudents!");
+        }
+    }
+    function setFalseButton(e){
+        for(let i = 0 ; i<courses.length; i++){
+            document.getElementById(courses[i].courseid).classList.remove("selected-button");
+        }
+        document.getElementById(e).classList.add("selected-button");
+    }
+    return (
+        <div className="staff-course-outer w-screen">
+            <div className="staff-course-button-container mt-16 flex justify-around items-center flex-wrap gap-3 text-sm">
+                {courses.map(
+                    (item) => <StaffCourseButton key={item.courseid} staffid={user.staffid} id={item.courseid} text={item.coursename} onClickHandler={getStudents} />
+                )}
+            </div>
+            <ul className="staff-course-ul h-[80vh] flex flex-col items-center my-20 overflow-auto">
+                {students.map(
+                    (item, index) => <StaffCourseListItem key={index} rollno={item.rollno} fullname={item.fullname} deptcode={item.deptcode} coursename ={item.coursename} />
+                )}
+            </ul>
+
+        </div>
+    );
+}
+
+export default StaffCourses;
+
+/*{
                 'courseid': 100,
                 'coursename': 'CompSci',
             },
@@ -23,148 +99,4 @@ function StaffCourses(){
             {
                 'courseid': 103,
                 'coursename': 'HumSci',
-            },
-        ]
-    );
-    const [students, setStudents] = useState(
-        [
-            {
-                'rollno':2000,
-                'fullname': "buddy",
-                'deptcode': 200,
-                'coursename': 'computer science'
-            },
-            {
-                'rollno':2001,
-                'fullname': "guy",
-                'deptcode': 200,
-                'coursename': 'dbms'
-            },
-            {
-                'rollno':2002,
-                'fullname': "person",
-                'deptcode': 202,
-                'coursename': 'data structures'
-            },
-            {
-                'rollno':2003,
-                'fullname': "another person",
-                'deptcode': 203,
-                'coursename': 'data structures'
-            },
-            {
-                'rollno':2004,
-                'fullname': "buddy",
-                'deptcode': 200,
-                'coursename': 'computer science'
-            },
-            {
-                'rollno':2000,
-                'fullname': "buddy",
-                'deptcode': 200,
-                'coursename': 'computer science'
-            },
-            {
-                'rollno':2001,
-                'fullname': "guy",
-                'deptcode': 200,
-                'coursename': 'dbms'
-            },
-            {
-                'rollno':2002,
-                'fullname': "person",
-                'deptcode': 202,
-                'coursename': 'data structures'
-            },
-            {
-                'rollno':2003,
-                'fullname': "another person",
-                'deptcode': 203,
-                'coursename': 'data structures'
-            },
-            {
-                'rollno':2004,
-                'fullname': "buddy",
-                'deptcode': 200,
-                'coursename': 'computer science'
-            },
-        ]
-    );
-    const [isView, setIsView] = useState(false);
-    const { token, user } = useSelector((state) => state.user);
-
-    useEffect(
-        function () {
-            async function getStaffCourses(){
-                try {
-                    const staffid = user.staffid;
-                    const response = await axios.get(`${VITE_BASE_URL}/staff/courses`);
-                    setCourses(response);
-                } catch (error) {
-                    console.log("Error in getting staff courses!");
-                }
-            }
-            async function createView(){
-                try {
-                    axios.post(`${VITE_BASE_URL}/staff/courses/${staffid}`);
-                    setIsView(true);
-                    setStudents(response);
-                } catch (error) {
-                    console.log("Error in creating view!");
-                    setIsView(false);
-                }
-            }
-            createView();
-            isView ? getStaffCourses() : console.log("Server issue creating a view!");
-        },
-        [isView, courses]
-    );
-    useEffect(
-        function () {
-            async function getAllStudents(){
-                try {
-                    const response = await axios.get(`${VITE_BASE_URL}/staff/courses/all`);
-                    setStudents(response);
-                } catch (error) {
-                    console.log("Error in getAllStudents");
-                }
-            }
-            getAllStudents();
-        },
-        [students]
-    );
-    async function getStudents(e){
-        try {
-            const courseid = e.target.id;
-            const staffid = user.staffid;
-            setFalseButton(e.target.id); //remove selected class from all buttons and add the class to the selected button
-            const response = await axios.get(`${VITE_BASE_URL}/staff/courses?id=${staffid}&c_id=${courseid}`);
-            setStudents(response);
-        } catch (error) {
-            console.log("Error in getStudents!");
-        }
-    }
-    function setFalseButton(e){
-        for(let i = 0 ; i<courses.length; i++){
-            document.getElementById(courses[i].courseid).classList.remove("selected-button");
-        }
-        document.getElementById(e).classList.add("selected-button");
-    }
-    return (
-        <div className="staff-course-outer w-screen">
-            <div className="staff-course-button-container mt-16 flex justify-center items-center flex-wrap gap-3">
-                {courses.map(
-                    (item) => <StaffCourseButton key={item.courseid} id={item.courseid} text={item.coursename} onClickHandler={getStudents} />
-                )}
-            </div>
-            <ul className="staff-course-ul h-[80vh] flex flex-col items-center my-20 overflow-auto">
-                {students.map(
-                    (item, index) => <StaffCourseListItem key={index} rollno={item.rollno} fullname={item.fullname} deptcode={item.deptcode} coursename ={item.coursename} />
-                )}
-            </ul>
-
-        </div>
-    );
-}
-
-export default StaffCourses;
+            }, */

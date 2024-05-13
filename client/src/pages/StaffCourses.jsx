@@ -82,32 +82,9 @@ function StaffCourses(){
         }
         document.getElementById(e).classList.add("selected-button");
     }
-    if (isLoading) return (
-        <div className="staff-course-outer w-screen"><Spinner /></div>)
-    else return(
+    return(
         <div className="staff-course-outer w-screen">
-        <AnimatePresence>
-        {(
-          <motion.p
-            initial={{
-              scale: 0,
-            }}
-            animate={{ scale: 1 }}
-            transition={{
-              duration: 1,
-              ease: "backInOut",
-            }}
-            exit={{
-              scale: 0,
-            }}
-          >
-            <FontAwesomeIcon
-              icon={faCircleExclamation}
-              style={{ color: "white" }}
-            />
-          </motion.p>
-        )}
-      </AnimatePresence>
+        
             <div className="staff-course-button-container mt-16 flex justify-around items-center flex-wrap gap-3 text-sm">
                 {courses.map(
                     (item) => <StaffCourseButton key={item.courseid} staffid={user.staffid} id={item.courseid} text={item.coursename} onClickHandler={getStudents} />

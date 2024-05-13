@@ -2,10 +2,6 @@ import {useState, useEffect} from 'react';
 import { useSelector } from "react-redux";
 import StaffCourseButton from "../components/StaffCourse/StaffCourseButton";
 import StaffCourseListItem from "../components/StaffCourse/StaffCourseListItem";
-import { AnimatePresence, motion } from "framer-motion";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
-import Spinner from '../components/Spinner';
 import axios from 'axios';
 const { VITE_BASE_URL } = import.meta.env;
 
@@ -20,25 +16,19 @@ function StaffCourses(){
         function () {
             async function getStaffCourses(){
                 try {
-                    setIsLoading(true);
                     const response = await axios.get(`${VITE_BASE_URL}/staff/courses/course`);
                     setCourses(response.data.data);
                 } catch (error) {
                     console.log("Error in getting staff courses!");
-                } finally {
-                    setIsLoading(false);
                 }
             }
             async function createView(){
                 try {
-                    setIsLoading(true);
                     await axios.get(`${VITE_BASE_URL}/staff/courses/create?staffid=${user.staffid}`);
                     setIsView(true);
                 } catch (error) {
                     console.log("Error in creating view!",error);
                     setIsView(false);
-                } finally {
-                    setIsLoading(false);
                 }
             }
             createView();
@@ -50,13 +40,10 @@ function StaffCourses(){
         function () {
             async function getAllStudents(){
                 try {
-                    setIsLoading(true);
                     const response = await axios.get(`${VITE_BASE_URL}/staff/courses/all`);
                     setStudents(response.data.data);
                 } catch (error) {
                     console.log("Error in getAllStudents");
-                } finally {
-                    setIsLoading(false);
                 }
             }
             getAllStudents();
@@ -65,15 +52,12 @@ function StaffCourses(){
     );
     async function getStudents(e){
         try {
-            setIsLoading(true);
             const courseid = e.target.id;
             setFalseButton(e.target.id); //remove selected class from all buttons and add the class to the selected button
             const response = await axios.get(`${VITE_BASE_URL}/staff/courses?c_id=${courseid}`);
             setStudents(response.data.data);
         } catch (error) {
             console.log("Error in getStudents!");
-        } finally {
-            setIsLoading(false);
         }
     }
     function setFalseButton(e){
@@ -101,20 +85,3 @@ function StaffCourses(){
 }
 
 export default StaffCourses;
-
-/*{
-                'courseid': 100,
-                'coursename': 'CompSci',
-            },
-            {
-                'courseid': 101,
-                'coursename': 'InfoSci',
-            },
-            {
-                'courseid': 102,
-                'coursename': 'EnvSci',
-            },
-            {
-                'courseid': 103,
-                'coursename': 'HumSci',
-            }, */

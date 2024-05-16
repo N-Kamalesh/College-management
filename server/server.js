@@ -6,7 +6,7 @@ const { PORT, CLIENT_URL } = process.env;
 import cookieParser from "cookie-parser";
 
 const app = express();
-const port = PORT || 5000;
+const port = PORT || 8080;
 
 app.use(
   cors({

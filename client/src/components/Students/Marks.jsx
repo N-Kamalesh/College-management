@@ -2,14 +2,14 @@ export default function Marks() {
   return (
     <main className="w-full min-h-screen text-center ">
       <div className="  text-center m-10 p-2">
-        <h1 className="text-black-100 text-4xl font-serif">
+        <h1 className="text-indigo-900 font-semibold text-4xl font-serif">
           ATTENDANCE AND MARKS
         </h1>
       </div>
 
-      <div className="float-right text-black-100    rounded-full flex justify-center items-center p-3 text-black-100 mr-20 mb-20">
+      <div className=" text-white   rounded-full flex justify-center items-center p-3  m-20 mb-20">
         <form>
-          <select>
+          <select className="bg-indigo-800 float-right border-2  border-indigo-400">
             <option value="sem1">Sem 1</option>
             <option value="sem2">Sem 2</option>
             <option value="sem3">Sem 3</option>
@@ -18,21 +18,51 @@ export default function Marks() {
         </form>
       </div>
 
-      <div className=" m-20 mt-30   text-center">
-        <table className="shadow-2xl  border-2 border-cyan-400  w-full">
-          <thead className="text-white">
+      <div className=" m-20 mt-30  text-center  flex justify-center items-center overflow-x-auto ">
+        <table className="shadow-2xl  border-2  border-indigo-400   w-full">
+          <thead className="text-white   overflow-x-auto">
             <tr>
-              <th className="py-3 bg-cyan-800">Course id</th>
-              <th className="py-3 bg-cyan-800">Course Name</th>
-              <th className="py-3 bg-cyan-800">Attendance</th>
-              <th className="py-3 bg-cyan-800">Internals</th>
-              <th className="py-3 bg-cyan-800">Externals</th>
-              <th className="py-3 bg-cyan-800">Total</th>
-              <th className="py-3 bg-cyan-800">Grade</th>
+              <th className="py-3 bg-indigo-900 ">Course id</th>
+              <th className="py-3 bg-indigo-900 ">Course Name</th>
+              <th className="py-3 bg-indigo-900 ">Attendance</th>
+              <th className="py-3 bg-indigo-900 ">Internals</th>
+              <th className="py-3 bg-indigo-900 ">Externals</th>
+              <th className="py-3 bg-indigo-900 ">Total</th>
+              <th className="py-3 bg-indigo-900 ">Grade</th>
             </tr>
           </thead>
-          <tbody className="text-black text-centre">
-            <tr className="bg-cyan-900  hover:bg-cyan-100 cursor-pointer duration-300">
+          <tbody className="text-white text-centre">
+            <tr className="bg-indigo-800  hover:border-2 border-cyan-100  cursor-pointer duration-300">
+              <td className="py-3 px-6">1</td>
+              <td className="py-3 px-6">database</td>
+              <td className="py-3 px-6">3</td>
+              <td className="py-3 px-6">4</td>
+              <td className="py-3 px-6">5</td>
+              <td className="py-3 px-6">6</td>
+              <td className="py-3 px-6">7</td>
+            </tr>
+
+            <tr className="bg-indigo-800 hover:border-2 border-cyan-100 cursor-pointer duration-300">
+              <td className="py-3 px-6">1</td>
+              <td className="py-3 px-6">database</td>
+              <td className="py-3 px-6">3</td>
+              <td className="py-3 px-6">4</td>
+              <td className="py-3 px-6">5</td>
+              <td className="py-3 px-6">6</td>
+              <td className="py-3 px-6">7</td>
+            </tr>
+
+            <tr className="bg-indigo-800 hover:border-2 border-cyan-100 cursor-pointer duration-300">
+              <td className="py-3 px-6">1</td>
+              <td className="py-3 px-6">database</td>
+              <td className="py-3 px-6">3</td>
+              <td className="py-3 px-6">4</td>
+              <td className="py-3 px-6">5</td>
+              <td className="py-3 px-6">6</td>
+              <td className="py-3 px-6">7</td>
+            </tr>
+
+            <tr className="bg-indigo-800 hover:border-2 border-cyan-100 cursor-pointer duration-300">
               <td className="py-3 px-6">1</td>
               <td className="py-3 px-6">2</td>
               <td className="py-3 px-6">3</td>
@@ -42,9 +72,9 @@ export default function Marks() {
               <td className="py-3 px-6">7</td>
             </tr>
 
-            <tr className="bg-cyan-900 hover:bg-cyan-100 cursor-pointer duration-300">
+            <tr className="bg-indigo-800 hover:border-2 border-cyan-100 cursor-pointer duration-300">
               <td className="py-3 px-6">1</td>
-              <td className="py-3 px-6">2</td>
+              <td className="py-3 px-6">database</td>
               <td className="py-3 px-6">3</td>
               <td className="py-3 px-6">4</td>
               <td className="py-3 px-6">5</td>
@@ -52,9 +82,9 @@ export default function Marks() {
               <td className="py-3 px-6">7</td>
             </tr>
 
-            <tr className="bg-cyan-900 hover:bg-cyan-100 cursor-pointer duration-300">
+            <tr className="bg-indigo-800 hover:border-2 border-cyan-100 cursor-pointer duration-300">
               <td className="py-3 px-6">1</td>
-              <td className="py-3 px-6">2</td>
+              <td className="py-3 px-6">database</td>
               <td className="py-3 px-6">3</td>
               <td className="py-3 px-6">4</td>
               <td className="py-3 px-6">5</td>
@@ -62,39 +92,9 @@ export default function Marks() {
               <td className="py-3 px-6">7</td>
             </tr>
 
-            <tr className="bg-cyan-900 hover:bg-cyan-100 cursor-pointer duration-300">
+            <tr className="bg-indigo-800 hover:border-2 border-cyan-100 cursor-pointer duration-300">
               <td className="py-3 px-6">1</td>
-              <td className="py-3 px-6">2</td>
-              <td className="py-3 px-6">3</td>
-              <td className="py-3 px-6">4</td>
-              <td className="py-3 px-6">5</td>
-              <td className="py-3 px-6">6</td>
-              <td className="py-3 px-6">7</td>
-            </tr>
-
-            <tr className="bg-cyan-900 hover:bg-cyan-100 cursor-pointer duration-300">
-              <td className="py-3 px-6">1</td>
-              <td className="py-3 px-6">2</td>
-              <td className="py-3 px-6">3</td>
-              <td className="py-3 px-6">4</td>
-              <td className="py-3 px-6">5</td>
-              <td className="py-3 px-6">6</td>
-              <td className="py-3 px-6">7</td>
-            </tr>
-
-            <tr className="bg-cyan-900 hover:bg-cyan-100 cursor-pointer duration-300">
-              <td className="py-3 px-6">1</td>
-              <td className="py-3 px-6">2</td>
-              <td className="py-3 px-6">3</td>
-              <td className="py-3 px-6">4</td>
-              <td className="py-3 px-6">5</td>
-              <td className="py-3 px-6">6</td>
-              <td className="py-3 px-6">7</td>
-            </tr>
-
-            <tr className="bg-cyan-900 hover:bg-cyan-100 cursor-pointer duration-300">
-              <td className="py-3 px-6">1</td>
-              <td className="py-3 px-6">2</td>
+              <td className="py-3 px-6">database</td>
               <td className="py-3 px-6">3</td>
               <td className="py-3 px-6">4</td>
               <td className="py-3 px-6">5</td>
@@ -104,12 +104,12 @@ export default function Marks() {
           </tbody>
         </table>
       </div>
-      <div className="bg-white mt-20 mr-20 ml-20 mb-10 flex justify-center items-center">
-        <table className="shadow-3xl bg-cyan-200 border-2 border-cyan-400 text-white w-full">
+      <div className="bg-white mt-20 mr-40 ml-40 mb-10 flex justify-center items-center">
+        <table className="shadow-3xl bg-cyan-200 border-2 border-indigo-400 text-white w-full">
           <thead>
             <tr>
-              <th className="py-3 bg-cyan-800">Current CGPA</th>
-              <th className="bg-cyan-800">9.8</th>
+              <th className="py-3 bg-indigo-900">Current CGPA</th>
+              <th className="bg-indigo-900">9.8</th>
             </tr>
           </thead>
         </table>

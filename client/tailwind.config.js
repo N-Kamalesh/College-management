@@ -21,6 +21,9 @@ export default {
       animation: {
         "open-menu": "open-menu 0.5s ease-in-out forwards",
       },
+      boxShadow: {
+        "3xl": "20px 20px 60px  rgba(0, 0, 0, 0.6)",
+      },
     },
   },
   plugins: [],

@@ -8,9 +8,9 @@ FlipCard.propTypes = {
 };
 function FlipCard({ coursename, deptcode, fullname, designation }) {
   return (
-    <div className="card-container min-w-[180px] max-h-[280px] min-h-[280px]  text-center rounded-3xl mx-6 hover:scale-105 transition delay-200">
-      <div className="card-content max-h-[260px] min-h-[260px] bg-indigo-800 rounded-lg">
-        <div className="card-front flex flex-col items-center w-full top-[80px] px-4">
+    <div className="card-container min-w-[180px] max-h-[280px] min-h-[280px] text-center rounded-3xl mx-6 hover:scale-105 transition delay-200">
+      <div className="card-content max-h-[260px] min-h-[260px] bg-indigo-800 rounded-lg h-auto ">
+        <div className="card-front flex flex-col items-center w-full top-[80px] px-4 ">
           <h6 className="card-front-course-title text-center m-0 mb-1 p-0 font-bold">
             {coursename}
           </h6>
@@ -19,7 +19,7 @@ function FlipCard({ coursename, deptcode, fullname, designation }) {
             {deptcode}
           </p>
         </div>
-        <div className="card-back flex flex-col items-center w-full top-[80px] px-4">
+        <div className="card-back flex flex-col items-center w-full top-[80px] px-4  ">
           <h6 className="card-back-course-instructor text-center m-0 mb-1 p-0 font-bold ">
             {fullname}
           </h6>

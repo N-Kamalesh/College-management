@@ -79,10 +79,10 @@ aside .active {
 }
 
 /*Staff Course*/
-.staff-course-li-div{
+.staff-course-li-div {
   height: 25px;
 }
-.selected-button{
+.selected-button {
   background-color: #0b83a7;
 }
 
@@ -92,13 +92,13 @@ aside .active {
 }
 
 .card-content {
-  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
   transition: transform 1s;
   transform-style: preserve-3d;
 }
 
 .card-container:hover .card-content {
-  transform: rotateY( 180deg ) ;
+  transform: rotateY(180deg);
   transition: transform 0.8s;
 }
 
@@ -110,5 +110,5 @@ aside .active {
 }
 
 .card-back {
-  transform: rotateY( 180deg );
+  transform: rotateY(180deg);
 }

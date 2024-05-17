@@ -6,13 +6,12 @@ import { createJWT } from "../utils/jwt.js";
 export async function adminSignInController(req, res, next) {
   const { email, password } = req.body;
   try {
-    const response = await db.query("SELECT * FROM admin WHERE email=$1", [
+    const response = await db.query("SELECT  FROM admin WHERE email=$1", [
       email,
     ]);
     if (!response.rowCount) {
       return next(errorHandler(404, "Admin not found!"));
     } else {
-      
       const validPwd = bcryptjs.compareSync(
         password,
         response.rows[0].password
@@ -32,9 +31,10 @@ export async function adminSignInController(req, res, next) {
 export async function staffSignInController(req, res, next) {
   const { staffId, password } = req.body;
   try {
-    const response = await db.query("SELECT * FROM staff WHERE staffId=$1", [
-      staffId,
-    ]);
+    const response = await db.query(
+      "SELECT staffid,fullname,gender,email,mobile,password, staff.deptcode,deptname,highest_qualification,designation,joindate FROM staff JOIN department ON department.deptcode = staff.deptcode WHERE staffId=$1",
+      [staffId]
+    );
     if (!response.rowCount) {
       return next(errorHandler(404, "Staff not found!"));
     } else {
@@ -63,9 +63,10 @@ export async function studentSignInController(req, res, next) {
   console.log("Inside student controller");
   const { rollno, password } = req.body;
   try {
-    const response = await db.query("SELECT * FROM students WHERE rollno=$1", [
-      rollno,
-    ]);
+    const response = await db.query(
+      "SELECT rollno,fullname,email,password,mobile,address,gender,dob,students.deptcode,sem,joinyear,deptname FROM students JOIN department on department.deptcode = students.deptcode WHERE rollno=$1",
+      [rollno]
+    );
     if (!response.rowCount) {
       return next(errorHandler(404, "Student not found!"));
     } else {

@@ -1,45 +1,85 @@
 import { useSelector } from "react-redux";
-
+import { dateOptions } from "../constants/utils";
 
 function StaffDashBoard() {
-
-
   const { user } = useSelector((state) => state.user);
 
-  const dateString = user.joindate;
-  const date = new Date(dateString);
-  const normalDate = date.toLocaleDateString(); // Converts to normal date format without time
-
-    
-    return (
-        <div className="staff-layout-outer w-full flex justify-center items-center">
-            <main className="staff-layout w-full py-5 bg-blue-500 border-transparent border-8 lg:mx-32 lg:my-24 rounded-lg mx-1 my-4 transition-[margin] duration-500 opacity-80">
-                <div className="staff-layout one grid grid-rows-3 grid-cols-12  h-40 my-12 bg-gray-100 rounded-lg opacity-100">
-                    <div className="one lg:col-span-3 text-xl flex align-middle items-center border-solid border-2 border-sky-500 col-span-6">ID</div>
-                    <div className="one staff lg:col-span-9 text-xl flex align-middle items-center border-solid border-2 border-sky-500 col-span-6">{user.staffid}</div>
-                    <div className="one lg:col-span-3 text-xl flex align-middle items-center border-solid border-2 border-sky-500 col-span-6">Name</div>
-                    <div className="one staff  lg:col-span-6 text-xl flex align-middle items-center border-solid border-2 border-sky-500 col-span-6">{user.fullname}</div>
-                    <div className="one lg:col-span-1 text-xl flex align-middle items-center  border-solid border-2 border-sky-500 col-span-10">Sex</div>
-                    <div className="one staff  col-span-2 text-xl flex align-middle items-center border-solid border-2 border-sky-500">{user.gender}</div>
-                    <div className="one lg:col-span-3 text-xl flex align-middle items-center border-solid border-2 border-sky-500 col-span-6">Designation</div>
-                    <div className="one staff lg:col-span-9 text-xl flex align-middle items-center border-solid border-2 border-sky-500 col-span-6">{user.designation}</div>
-                </div>
-                <div className="staff-layout two grid grid-rows-2 grid-cols-12 h-32 my-12 bg-gray-100 rounded-lg opacity-100">
-                    <div className="two md:col-span-4 text-md flex align-middle items-center border-solid border-2 border-sky-500 col-span-12">Highest Qualification</div>
-                    <div className="two staff md:col-span-8 text-md flex align-middle items-center border-solid border-2 border-sky-500 col-span-12">{user.highest_qualification}</div>
-                    <div className="two md:col-span-4 text-xl flex align-middle items-center border-solid border-2 border-sky-500 col-span-12" border-solid border-2 border-sky-500>Date of Joining</div>
-                    <div className="two staff md:col-span-8 text-xl flex align-middle items-center border-solid border-2 border-sky-500 col-span-12">{normalDate}</div>
-                </div>
-                <div className="staff-layout contact grid grid-rows-3 grid-cols-12 bg-gray-100 my-12 h-40 rounded-lg opacity-100">
-                    <div className="contact  col-span-12 text-xl flex align-middle items-center border-solid border-2 border-sky-500">Contact</div>
-                    <div className="contact  md:col-span-6 text-xl flex align-middle items-center border-solid border-2 border-sky-500 col-span-12 order-1">Email</div>
-                    <div className="contact  md:col-span-6 text-xl flex align-middle items-center border-solid border-2 border-sky-500 col-span-12 order-2">Mobile</div>
-                    <div className="contact staff md:col-span-6 text-xl flex align-middle items-center border-solid border-2 border-sky-500 col-span-12 order-1">{user.email}</div>
-                    <div className="contact staff md:col-span-6 text-xl flex align-middle items-center border-solid border-2 border-sky-500 col-span-12 order-2">{user.mobile}</div>
-                </div>
-        </main>
+  return (
+    <main className="flex flex-col items-center justify-center w-full min-h-screen ">
+      <h1 className="text-center pt-5 text-3xl text-indigo-800 font-bold">
+        Dashboard
+      </h1>
+      <div className="w-[95%] bg-indigo-800 m-10 rounded-3xl py-4 lg:py-9  h-auto  grid grid-cols-1 gap-0  lg:grid-cols-2 text-center grid-rows-auto shadow-3xl">
+        <div className=" rounded-lg ">
+          <div className="  rounded-lg m-3 mt-0 max-[520px]:h-auto h-16 grid grid-cols-3 gap-0 max-[520px]:flex max-[520px]:flex-col">
+            <div className=" bg-slate-100  p-2 max-[520px]:h-auto m-3 h-16 col-span-1   rounded-lg flex flex-col   justify-center items-center">
+              Name
+            </div>
+            <div className="bg-slate-100  p-2 max-[520px]:h-auto m-3 max-[520px]:mt-0 h-16 col-span-2    rounded-lg flex flex-col   justify-center items-center max-[380px]:text-xs">
+              {user.fullname}
+            </div>
+          </div>
+          <div className="  rounded-lg m-3   max-[520px]:h-auto h-16  grid  grid-cols-3 gap-0 max-[520px]:flex max-[520px]:flex-col">
+            <div className="bg-slate-100 m-3 p-2 max-[520px]:h-auto h-16  col-span-1    rounded-lg flex flex-col   justify-center items-center">
+              Staff ID
+            </div>
+            <div className="bg-slate-100 m-3 max-[520px]:mt-0 p-2 max-[520px]:h-auto h-16 col-span-2    rounded-lg flex flex-col  justify-center items-center max-[380px]:text-xs">
+              {user.staffid}
+            </div>
+          </div>
+          <div className=" rounded-lg m-3   max-[520px]:h-auto h-16  grid grid-cols-3 gap-0 max-[520px]:flex max-[520px]:flex-col">
+            <div className="bg-slate-100 m-3 p-2 max-[520px]:h-auto h-16 col-span-1   rounded-lg flex flex-col   justify-center items-center">
+              Designation
+            </div>
+            <div className="bg-slate-100 m-3 max-[520px]:mt-0 p-2 max-[520px]:h-auto h-16 col-span-2   rounded-lg flex flex-col justify-center items-center max-[380px]:text-xs">
+              {user.designation}
+            </div>
+          </div>
+          <div className="rounded-lg m-3   max-[520px]:h-auto h-16  grid grid-cols-3 gap-0 max-[520px]:flex max-[520px]:flex-col">
+            <div className="bg-slate-100 m-3  p-2 max-[520px]:h-auto h-16 col-span-1     rounded-lg flex flex-col   justify-center items-center">
+              Qualification
+            </div>
+            <div className="bg-slate-100 m-3 max-[520px]:mt-0 p-2 max-[520px]:h-auto h-16 col-span-2   rounded-lg flex flex-col justify-center items-center max-[380px]:text-xs">
+              {user.highest_qualification}
+            </div>
+          </div>
         </div>
-        
-    );
+        <div className=" rounded-lg   pb-2">
+          <div className="  rounded-lg  m-3 mt-0   max-[520px]:h-auto h-16  grid grid-cols-3 gap-0 max-[520px]:flex max-[520px]:flex-col">
+            <div className="bg-slate-100 m-3 p-2 max-[520px]:h-auto h-16  col-span-1    rounded-lg flex flex-col   justify-center items-center">
+              Department
+            </div>
+            <div className="bg-slate-100 m-3 max-[520px]:mt-0 p-2 max-[520px]:h-auto h-16 col-span-2   rounded-lg flex flex-col justify-center items-center max-[380px]:text-xs">
+              {user.deptname}
+            </div>
+          </div>
+          <div className="  rounded-lg m-3   max-[520px]:h-auto h-16  grid grid-cols-3 gap-0 max-[520px]:flex max-[520px]:flex-col">
+            <div className="bg-slate-100 m-3 p-2 max-[520px]:h-auto h-16  col-span-1   rounded-lg flex flex-col   justify-center items-center">
+              Join Date
+            </div>
+            <div className="bg-slate-100 m-3 max-[520px]:mt-0 p-2 max-[520px]:h-auto h-16  col-span-2  rounded-lg flex flex-col justify-center items-center max-[380px]:text-xs">
+              {new Date(user.joindate).toLocaleDateString("en-US", dateOptions)}
+            </div>
+          </div>
+          <div className=" rounded-lg m-3   max-[520px]:h-auto h-16  grid grid-cols-3 gap-0 max-[520px]:flex max-[520px]:flex-col">
+            <div className="bg-slate-100 m-3 p-2 max-[520px]:h-auto h-16  col-span-1    rounded-lg flex flex-col   justify-center items-center">
+              Email
+            </div>
+            <div className="bg-slate-100 m-3 max-[520px]:mt-0 p-2 max-[520px]:h-auto h-16  col-span-2   rounded-lg flex flex-col justify-center items-center max-[380px]:text-xs">
+              {user.email}
+            </div>
+          </div>
+          <div className="  rounded-lg m-3   max-[520px]:h-auto h-16  grid grid-cols-3 gap-0 max-[520px]:flex max-[520px]:flex-col">
+            <div className="bg-slate-100 m-3 p-2 max-[520px]:h-auto h-16  col-span-1 w-100   rounded-lg flex flex-col   justify-center items-center">
+              Mobile
+            </div>
+            <div className="bg-slate-100 m-3 max-[520px]:mt-0 p-2 max-[520px]:h-auto h-16 col-span-2 w-100  rounded-lg flex flex-col justify-center items-center max-[380px]:text-xs">
+              {user.mobile}
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
 }
 export default StaffDashBoard;

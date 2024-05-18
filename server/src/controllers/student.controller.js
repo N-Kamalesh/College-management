@@ -2,9 +2,8 @@ import db from "../config/db.js";
 import { errorHandler } from "../utils/error.js";
 
 export async function getCourses(req, res, next) {
-  console.log(req.user);
   const { rollno, sem } = req.query;
-  if (req.user.rollno !== Number(rollno)) {
+  if (Number(req.user.rollno) !== Number(rollno)) {
     return next(errorHandler(403, "You can only access your courses"));
   }
   try {
@@ -24,12 +23,12 @@ export async function getCourses(req, res, next) {
 
 export async function getMarks(req, res, next) {
   const rollno = req.params.id;
-  if (req.user.rollno !== Number(rollno)) {
+  if (Number(req.user.rollno) !== Number(rollno)) {
     return next(errorHandler(403, "You can only access your marks"));
   }
   try {
     const response = await db.query(
-      "SELECT * FROM marks WHERE rollno=$1 ORDER BY sem, courseid",
+      "SELECT marks.courseid, coursename, credits, rollno, attendance, sem, year, internals, externals, total, grade FROM marks JOIN course ON course.courseid = marks.courseid WHERE rollno=$1 ORDER BY sem, courseid",
       [Number(rollno)]
     );
     res.status(200).json({

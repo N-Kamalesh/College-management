@@ -6,6 +6,7 @@ import Announcement from "./components/Admin/Announcement/Announcement";
 import Department from "./components/Admin/Department/Department";
 import StudentDashboard from "./components/Students/Dashboard";
 import StudentMarks from "./components/Staff/StudentMarks";
+import Marks from "./components/Students/Marks";
 import StaffLayout from "./pages/StaffLayout";
 import StaffDashBoard from "./pages/StaffDashBoard";
 import StaffCourses from "./pages/StaffCourses";
@@ -41,12 +42,9 @@ function App() {
                 </ProtectedRoute>
               }
             >
-              <Route
-                index
-                element={<Navigate replace to="dashboard" />}
-              />
+              <Route index element={<Navigate replace to="dashboard" />} />
               <Route path="dashboard" element={<StudentDashboard />} />
-              <Route path="marks" element={<StudentMarks/>}/>
+              <Route path="marks" element={<Marks />} />
             </Route>
           </Route>
           <Route path="/staff" element={<Layout />}>
@@ -62,10 +60,10 @@ function App() {
             >
               <Route index element={<Navigate replace to="dashboard" />} />
               <Route path="dashboard" element={<StaffDashBoard />} />
-              <Route index element = {<StaffDashBoard />} />
-              <Route path="course" element = {<MarksLayout />} > 
-                <Route index element = {<StaffCourses />} />
-                <Route path="student" element ={<StudentMarks />} />
+              <Route index element={<StaffDashBoard />} />
+              <Route path="course" element={<MarksLayout />}>
+                <Route index element={<StaffCourses />} />
+                <Route path="student" element={<StudentMarks />} />
               </Route>
             </Route>
           </Route>

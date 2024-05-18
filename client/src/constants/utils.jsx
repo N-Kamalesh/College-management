@@ -36,3 +36,42 @@ export function createArray(marks) {
   semSet.forEach((sems) => sem.push(sems));
   return sem.sort((a, b) => a - b);
 }
+
+export function getCgpa(marks) {
+  let totalCredits = 0;
+  const isFail = marks.find((mark) => mark.grade === "F");
+  if (isFail) return "NA";
+  const isSA = marks.find((mark) => mark.grade === "SA");
+  if (isSA) return "NA";
+  const sortedMarks = marks.filter((mark) => mark.grade !== null);
+  let total = 0;
+  sortedMarks.forEach((mark) => {
+    switch (mark.grade) {
+      case "A":
+        totalCredits += mark.credits * 10;
+        total += mark.credits;
+        break;
+      case "B":
+        totalCredits += mark.credits * 9;
+        total += mark.credits;
+        break;
+      case "C":
+        totalCredits += mark.credits * 8;
+        total += mark.credits;
+        break;
+      case "D":
+        totalCredits += mark.credits * 7;
+        total += mark.credits;
+        break;
+      case "E":
+        totalCredits += mark.credits * 6;
+        total += mark.credits;
+        break;
+      default:
+        console.log(mark);
+        return "NA";
+    }
+  });
+  const gpa = totalCredits / total;
+  return gpa;
+}

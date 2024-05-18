@@ -4,23 +4,28 @@ import FlipCard from "./FlipCard";
 import axios from "axios";
 import Spinner from "../Spinner";
 import { dateOptions } from "../../constants/utils";
-import { faCircleExclamation, motion } from "@fortawesome/free-solid-svg-icons";
-import { AnimatePresence } from "framer-motion";
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
+import { AnimatePresence, motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+const { VITE_BASE_URL } = import.meta.env;
 function Dashboard() {
-  const { VITE_BASE_URL } = import.meta.env;
-  const { user } = useSelector((state) => state.user);
   const [isLoading, setIsLoading] = useState(false);
   const [courseInstructors, setCourseInstructors] = useState([]);
   const [error, setError] = useState("");
+  const { user, token } = useSelector((state) => state.user);
   useEffect(
     function () {
       async function fetchInstructors() {
         try {
           setIsLoading(true);
           const response = await axios.get(
-            `${VITE_BASE_URL}/student/dashboard?rollno=${user.rollno}&sem=${user.sem}`
+            `${VITE_BASE_URL}/student/dashboard?rollno=${user.rollno}&sem=${user.sem}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
           );
           console.log(response);
           if (response.data.success) {
@@ -40,7 +45,7 @@ function Dashboard() {
       }
       fetchInstructors();
     },
-    [VITE_BASE_URL, user.rollno, user.sem]
+    [user.rollno, user.sem, token]
   );
 
   useEffect(

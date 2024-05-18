@@ -6,7 +6,7 @@ import { createJWT } from "../utils/jwt.js";
 export async function adminSignInController(req, res, next) {
   const { email, password } = req.body;
   try {
-    const response = await db.query("SELECT  FROM admin WHERE email=$1", [
+    const response = await db.query("SELECT * FROM admin WHERE email=$1", [
       email,
     ]);
     if (!response.rowCount) {
@@ -44,7 +44,7 @@ export async function staffSignInController(req, res, next) {
       );
       if (!validPwd) return next(errorHandler(401, "Wrong password!"));
       const { rowCount } = await db.query(
-        "select * from staff join department on department.hod_id = staff.staffId where staffId=$1",
+        "SELECT * FROM staff JOIN department ON department.hod_id = staff.staffId WHERE staffId=$1",
         [staffId]
       );
       let isHod = false;

@@ -3,7 +3,6 @@ function StaffCourseListItem(props) {
     const navigate = useNavigate();
     const location = useLocation();
     async function handleLiClick(roll, cId, sem, year){
-        console.log("CLicked");
         const data = {
             rollno: props.rollno,
             courseid: props.courseid,

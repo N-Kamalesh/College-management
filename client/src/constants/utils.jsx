@@ -28,3 +28,11 @@ export function extractUniqueDepartments(students) {
 
   return uniqueDepartmentsArray;
 }
+
+export function createArray(marks) {
+  const semSet = new Set();
+  marks.forEach((mark) => semSet.add(mark.sem));
+  const sem = [];
+  semSet.forEach((sems) => sem.push(sems));
+  return sem.sort((a, b) => a - b);
+}

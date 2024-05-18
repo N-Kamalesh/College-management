@@ -1,11 +1,9 @@
 export default function Marks() {
   return (
     <main className="w-full min-h-screen text-center ">
-      <div className="  text-center m-10 p-2">
-        <h1 className="text-indigo-900 font-semibold text-4xl font-serif">
-          ATTENDANCE AND MARKS
-        </h1>
-      </div>
+      <h1 className="text-center pt-5 text-3xl text-indigo-800 font-bold">
+        Attendance & Marks
+      </h1>
 
       <div className=" text-white   rounded-full flex justify-center items-center p-3  m-20 mb-20">
         <form>

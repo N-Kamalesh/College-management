@@ -1,23 +1,42 @@
 import db from "../config/db.js";
+import { errorHandler } from "../utils/error.js";
 
-export function studentController(req, res) {
-  res.json({ message: "Hello minna san" });
-}
-
-export async function studentCourses(req, res, next) {
+export async function getCourses(req, res, next) {
+  console.log(req.user);
   const { rollno, sem } = req.query;
+  if (req.user.rollno !== Number(rollno)) {
+    return next(errorHandler(403, "You can only access your courses"));
+  }
   try {
     const response = await db.query(
       "SELECT staff.fullname AS fullname, course.coursename, course.deptcode, staff.designation FROM takes JOIN students ON takes.rollno=students.rollno JOIN staff ON staff.staffid=takes.staffid JOIN course ON course.courseid=takes.courseid WHERE students.rollno=$1 AND takes.sem=$2;",
-      [rollno, sem]
+      [Number(rollno), Number(sem)]
     );
-    res
-      .status(200)
-      .json({
-        data: response.rows,
-        success: true,
-        message: "Courses fetched successfully",
-      });
+    res.status(200).json({
+      data: response.rows,
+      success: true,
+      message: "Courses fetched successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getMarks(req, res, next) {
+  const rollno = req.params.id;
+  if (req.user.rollno !== Number(rollno)) {
+    return next(errorHandler(403, "You can only access your marks"));
+  }
+  try {
+    const response = await db.query(
+      "SELECT * FROM marks WHERE rollno=$1 ORDER BY sem, courseid",
+      [Number(rollno)]
+    );
+    res.status(200).json({
+      data: response.rows,
+      success: true,
+      message: "Marks fetched successfully",
+    });
   } catch (error) {
     next(error);
   }

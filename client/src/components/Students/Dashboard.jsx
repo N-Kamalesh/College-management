@@ -4,6 +4,9 @@ import FlipCard from "./FlipCard";
 import axios from "axios";
 import Spinner from "../Spinner";
 import { dateOptions } from "../../constants/utils";
+import { faCircleExclamation, motion } from "@fortawesome/free-solid-svg-icons";
+import { AnimatePresence } from "framer-motion";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Dashboard() {
   const { VITE_BASE_URL } = import.meta.env;
@@ -55,7 +58,30 @@ function Dashboard() {
       <h1 className="text-center pt-5 text-3xl text-indigo-800 font-bold">
         Dashboard
       </h1>
-
+      <AnimatePresence>
+        {error && (
+          <motion.p
+            initial={{
+              scale: 0,
+            }}
+            animate={{ scale: 1 }}
+            transition={{
+              duration: 1,
+              ease: "backInOut",
+            }}
+            exit={{
+              scale: 0,
+            }}
+            className="bg-red-500 font-sans text-white rounded-xl p-4 max-w-lg w-[90%] mx-auto mb-2"
+          >
+            <FontAwesomeIcon
+              icon={faCircleExclamation}
+              style={{ color: "white" }}
+            />{" "}
+            {error}
+          </motion.p>
+        )}
+      </AnimatePresence>
       <div className="bg-indigo-800 m-10 rounded-3xl py-4 lg:py-9  h-auto  grid grid-cols-1 gap-0  lg:grid-cols-2 text-center grid-rows-auto ">
         <div className=" rounded-lg ">
           <div className="  rounded-lg m-3 mt-0 max-[520px]:h-auto h-16 grid grid-cols-3 gap-0 max-[520px]:flex max-[520px]:flex-col">

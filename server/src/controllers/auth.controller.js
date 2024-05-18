@@ -52,7 +52,6 @@ export async function staffSignInController(req, res, next) {
       const { password: hashedPassword, ...data } = response.rows[0];
       const token = createJWT({ staffId });
       res.status(200).json({ data, token, isHod, success: true });
-      console.log("here");
     }
   } catch (error) {
     next(error);

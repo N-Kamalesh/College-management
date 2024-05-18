@@ -4,8 +4,8 @@ import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import Spinner from "../Spinner";
-import { createArray, getCgpa } from "../../constants/utils";
+import Spinner from "../../Spinner";
+import { createArray, getCgpa } from "../../../constants/utils";
 
 const { VITE_BASE_URL } = import.meta.env;
 export default function Marks() {

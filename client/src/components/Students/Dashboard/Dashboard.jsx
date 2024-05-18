@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import FlipCard from "./FlipCard";
 import axios from "axios";
-import Spinner from "../Spinner";
-import { dateOptions } from "../../constants/utils";
+import Spinner from "../../Spinner";
+import { dateOptions } from "../../../constants/utils";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { AnimatePresence, motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -177,7 +177,7 @@ function Dashboard() {
         Courses you&apos;re currently studying
       </h1>
       {courseInstructors.length === 0 ? (
-        <p className="text-center mt-4">
+        <p className="text-center my-4">
           It seems like you&apos;re not enrolled in any courses currently
         </p>
       ) : (

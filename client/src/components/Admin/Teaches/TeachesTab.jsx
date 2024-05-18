@@ -8,7 +8,7 @@ TeachesTab.propTypes = {
 };
 function TeachesTab({ teaches, onBack }) {
   return (
-    <article className="flex flex-col relative items-center gap-4 overflow-y-scroll h-[85vh] w-[90%] max-w-6xl p-4 border-2 border-indigo-800">
+    <article className="flex flex-col relative items-center gap-4 overflow-y-auto h-[85vh] w-[90%] max-w-6xl p-4 border-2 border-indigo-800">
       <button
         className="text-xl lg:text-2xl absolute  left-2 lg:left-5 top-1 lg:top-auto"
         type="button"

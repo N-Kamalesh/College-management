@@ -40,3 +40,22 @@ export async function getMarks(req, res, next) {
     next(error);
   }
 }
+
+export async function getAnnouncements(req, res, next) {
+  const deptcode = req.params.id;
+  try {
+    const response = await db.query(
+      "SELECT announcement_id,title,content,created_at,updated_at,announcements.deptcode,deptname FROM announcements JOIN department ON department.deptcode = announcements.deptcode WHERE announcements.deptcode = $1",
+      [Number(deptcode)]
+    );
+    res
+      .status(200)
+      .json({
+        data: response.rows,
+        message: "Announcemenets fetched successfully",
+        success: true,
+      });
+  } catch (error) {
+    next(error);
+  }
+}

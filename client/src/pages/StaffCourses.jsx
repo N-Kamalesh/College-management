@@ -9,7 +9,6 @@ function StaffCourses(){
     const [courses, setCourses] = useState([{}]);
     const [students, setStudents] = useState([{}]);
     const [isView, setIsView] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
     const { token, user } = useSelector((state) => state.user);
 
     useEffect(

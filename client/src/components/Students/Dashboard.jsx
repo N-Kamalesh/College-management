@@ -4,8 +4,8 @@ import FlipCard from "./FlipCard";
 import axios from "axios";
 import Spinner from "../Spinner";
 import { dateOptions } from "../../constants/utils";
-import { faCircleExclamation, motion } from "@fortawesome/free-solid-svg-icons";
-import { AnimatePresence } from "framer-motion";
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
+import { AnimatePresence, motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Dashboard() {

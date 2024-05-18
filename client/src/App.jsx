@@ -5,7 +5,7 @@ import AppLayout from "./pages/AppLayout";
 import Announcement from "./components/Admin/Announcement/Announcement";
 import Department from "./components/Admin/Department/Department";
 import StudentDashboard from "./components/Students/Dashboard";
-import StudentMarks from "./components/Students/Marks";
+import StudentMarks from "./components/Staff/StudentMarks";
 import StaffLayout from "./pages/StaffLayout";
 import StaffDashBoard from "./pages/StaffDashBoard";
 import StaffCourses from "./pages/StaffCourses";
@@ -14,6 +14,7 @@ import Student from "./components/Admin/Student/Student";
 import Staff from "./components/Admin/Staff/Staff";
 import Teaches from "./components/Admin/Teaches/Teaches";
 import Takes from "./components/Admin/Takes/Takes";
+import MarksLayout from "./pages/MarksLayout";
 const HomePage = lazy(() => import("./pages/Homepage"));
 const StudentLogin = lazy(() => import("./pages/StudentLogin"));
 const StaffLogin = lazy(() => import("./pages/StaffLogin"));
@@ -43,7 +44,7 @@ function App() {
               <Route
                 index
                 element={<Navigate replace to="dashboard" />}
-              ></Route>
+              />
               <Route path="dashboard" element={<StudentDashboard />} />
               <Route path="marks" element={<StudentMarks/>}/>
             </Route>
@@ -62,7 +63,10 @@ function App() {
               <Route index element={<Navigate replace to="dashboard" />} />
               <Route path="dashboard" element={<StaffDashBoard />} />
               <Route index element = {<StaffDashBoard />} />
-              <Route path="course" element = {<StaffCourses />} />  
+              <Route path="course" element = {<MarksLayout />} > 
+                <Route index element = {<StaffCourses />} />
+                <Route path="student" element ={<StudentMarks />} />
+              </Route>
             </Route>
           </Route>
           <Route path="/admin" element={<Layout />}>

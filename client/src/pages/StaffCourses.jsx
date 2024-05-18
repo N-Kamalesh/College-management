@@ -76,7 +76,7 @@ function StaffCourses(){
             </div>
             <ul className="staff-course-ul h-[80vh] flex flex-col items-center my-20 overflow-auto">
                 {students.map(
-                    (item, index) => <StaffCourseListItem key={index} rollno={item.rollno} fullname={item.fullname} deptcode={item.deptcode} coursename ={item.coursename} />
+                    (item, index) => <StaffCourseListItem key={index} courseid={item.courseid} rollno={item.rollno} fullname={item.fullname} deptcode={item.deptcode} coursename ={item.coursename} year={item.year} sem={item.sem}/>
                 )}
             </ul>
 

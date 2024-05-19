@@ -4,16 +4,18 @@ import SpinnerFullPage from "./components/SpinnerFullPage";
 import AppLayout from "./pages/AppLayout";
 import Announcement from "./components/Admin/Announcement/Announcement";
 import Department from "./components/Admin/Department/Department";
-import StudentDashboard from "./components/Students/Dashboard";
-import StudentMarks from "./components/Staff/StudentMarks";
-import StaffLayout from "./pages/StaffLayout";
-import StaffDashBoard from "./pages/StaffDashBoard";
-import StaffCourses from "./pages/StaffCourses";
 import Course from "./components/Admin/Courses/Course";
 import Student from "./components/Admin/Student/Student";
 import Staff from "./components/Admin/Staff/Staff";
 import Teaches from "./components/Admin/Teaches/Teaches";
 import Takes from "./components/Admin/Takes/Takes";
+import StudentDashboard from "./components/Students/Dashboard/Dashboard";
+import Marks from "./components/Students/Marks/Marks";
+import StudentAnnouncement from "./components/Students/Announcement/Announcement";
+import StaffAnnouncement from "./components/Staff/Announcement/Announcement";
+import StudentMarks from "./components/Staff/Course/StudentMarks";
+import StaffDashBoard from "./components/Staff/Dashboard/StaffDashBoard";
+import StaffCourses from "./components/Staff/Course/StaffCourses";
 import MarksLayout from "./pages/MarksLayout";
 const HomePage = lazy(() => import("./pages/Homepage"));
 const StudentLogin = lazy(() => import("./pages/StudentLogin"));
@@ -41,12 +43,10 @@ function App() {
                 </ProtectedRoute>
               }
             >
-              <Route
-                index
-                element={<Navigate replace to="dashboard" />}
-              />
+              <Route index element={<Navigate replace to="dashboard" />} />
               <Route path="dashboard" element={<StudentDashboard />} />
-              <Route path="marks" element={<StudentMarks/>}/>
+              <Route path="marks" element={<Marks />} />
+              <Route path="announcement" element={<StudentAnnouncement />} />
             </Route>
           </Route>
           <Route path="/staff" element={<Layout />}>
@@ -56,17 +56,18 @@ function App() {
               path="app"
               element={
                 <ProtectedRoute>
-                  <StaffLayout />
+                  <AppLayout />
                 </ProtectedRoute>
               }
             >
               <Route index element={<Navigate replace to="dashboard" />} />
               <Route path="dashboard" element={<StaffDashBoard />} />
-              <Route index element = {<StaffDashBoard />} />
-              <Route path="course" element = {<MarksLayout />} > 
-                <Route index element = {<StaffCourses />} />
-                <Route path="student" element ={<StudentMarks />} />
+              <Route index element={<StaffDashBoard />} />
+              <Route path="course" element={<MarksLayout />}>
+                <Route index element={<StaffCourses />} />
+                <Route path="student" element={<StudentMarks />} />
               </Route>
+              <Route path="announcement" element={<StaffAnnouncement />} />
             </Route>
           </Route>
           <Route path="/admin" element={<Layout />}>

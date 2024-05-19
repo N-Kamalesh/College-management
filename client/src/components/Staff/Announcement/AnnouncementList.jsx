@@ -1,10 +1,11 @@
 import PropTypes from "prop-types";
-import TakesItem from "./TakesItem";
+import AnnouncementItem from "./AnnouncementItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
+import { useSelector } from "react-redux";
 
-TakesList.propTypes = {
-  takess: PropTypes.array,
+AnnouncementList.propTypes = {
+  announcements: PropTypes.array,
   onAdd: PropTypes.func,
   sortBy: PropTypes.string,
   searchQuery: PropTypes.string,
@@ -12,12 +13,11 @@ TakesList.propTypes = {
   setSearchQuery: PropTypes.func,
   handleDeleteClick: PropTypes.func,
   handleEditClick: PropTypes.func,
-  departments: PropTypes.array,
   handleClick: PropTypes.func,
 };
 
-function TakesList({
-  takess,
+function AnnouncementList({
+  announcements,
   onAdd,
   sortBy,
   searchQuery,
@@ -26,21 +26,24 @@ function TakesList({
   handleDeleteClick,
   handleEditClick,
   handleClick,
-  departments,
 }) {
+  const { isHod } = useSelector((state) => state.user);
+
   return (
     <section className="flex flex-col items-center gap-4 overflow-y-auto h-[85vh] w-[90%] max-w-6xl p-4 border-2 border-indigo-800">
-      <button
-        onClick={onAdd}
-        className="bg-indigo-600 text-xs sm:text-sm md:text-lg hover:bg-indigo-800  rounded-md text-white px-4 py-2 "
-      >
-        <FontAwesomeIcon icon={faCirclePlus} />
-        <span className="ml-2">Add new takes</span>
-      </button>
+      {isHod && (
+        <button
+          onClick={onAdd}
+          className="bg-indigo-600 text-xs sm:text-sm md:text-lg hover:bg-indigo-800  rounded-md text-white px-4 py-2 "
+        >
+          <FontAwesomeIcon icon={faCirclePlus} />
+          <span className="ml-2">Add new announcement</span>
+        </button>
+      )}
       <section className="flex flex-col md:flex-row w-[90%] md:justify-evenly">
         <input
           className="border-2  border-indigo-200  max-w-3xl px-4 py-2 text-sm md:text-lg focus:border-2 focus:border-indigo-800 focus:outline-none w-full md:w-2/5"
-          placeholder="Search by takes & course id or name"
+          placeholder="Search by word"
           type="text"
           name="searchQuery"
           value={searchQuery}
@@ -53,23 +56,18 @@ function TakesList({
           onChange={(e) => setSortBy(e.target.value)}
           className="text-center border-2 mt-2 md:mt-0 border-indigo-200 w-full md:w-2/5 max-w-3xl px-4 py-2 text-sm md:text-lg focus:border-2 focus:border-indigo-800 focus:outline-none"
         >
-          <option value="all">All Departments</option>
-          {departments.map((department) => (
-            <option key={department[0]} value={department[0]}>
-              {department[1]}
-            </option>
-          ))}
+          <option value="newcreated">Newest announcements</option>
+          <option value="oldcreated">Oldest announcements</option>
+          <option value="lastupdated">Recently updated</option>
         </select>
       </section>
-      {takess.length === 0 ? (
-        <p className="text-center">
-          None of the staffs have teached any course yet
-        </p>
+      {announcements.length === 0 ? (
+        <p className="text-center">No announcements are available</p>
       ) : (
-        takess.map((takes, index) => (
-          <TakesItem
-            takes={takes}
-            key={index}
+        announcements.map((announcement) => (
+          <AnnouncementItem
+            announcement={announcement}
+            key={announcement.announcement_id}
             handleDeleteClick={handleDeleteClick}
             handleEditClick={handleEditClick}
             handleClick={handleClick}
@@ -80,4 +78,4 @@ function TakesList({
   );
 }
 
-export default TakesList;
+export default AnnouncementList;

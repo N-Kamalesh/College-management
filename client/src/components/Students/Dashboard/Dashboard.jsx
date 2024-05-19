@@ -2,25 +2,30 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import FlipCard from "./FlipCard";
 import axios from "axios";
-import Spinner from "../Spinner";
-import { dateOptions } from "../../constants/utils";
+import Spinner from "../../Spinner";
+import { dateOptions } from "../../../constants/utils";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { AnimatePresence, motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+const { VITE_BASE_URL } = import.meta.env;
 function Dashboard() {
-  const { VITE_BASE_URL } = import.meta.env;
-  const { user } = useSelector((state) => state.user);
   const [isLoading, setIsLoading] = useState(false);
   const [courseInstructors, setCourseInstructors] = useState([]);
   const [error, setError] = useState("");
+  const { user, token } = useSelector((state) => state.user);
   useEffect(
     function () {
       async function fetchInstructors() {
         try {
           setIsLoading(true);
           const response = await axios.get(
-            `${VITE_BASE_URL}/student/dashboard?rollno=${user.rollno}&sem=${user.sem}`
+            `${VITE_BASE_URL}/student/dashboard?rollno=${user.rollno}&sem=${user.sem}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
           );
           console.log(response);
           if (response.data.success) {
@@ -40,7 +45,7 @@ function Dashboard() {
       }
       fetchInstructors();
     },
-    [VITE_BASE_URL, user.rollno, user.sem]
+    [user.rollno, user.sem, token]
   );
 
   useEffect(
@@ -172,7 +177,7 @@ function Dashboard() {
         Courses you&apos;re currently studying
       </h1>
       {courseInstructors.length === 0 ? (
-        <p className="text-center mt-4">
+        <p className="text-center my-4">
           It seems like you&apos;re not enrolled in any courses currently
         </p>
       ) : (

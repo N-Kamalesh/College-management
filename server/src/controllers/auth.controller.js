@@ -44,7 +44,7 @@ export async function staffSignInController(req, res, next) {
       );
       if (!validPwd) return next(errorHandler(401, "Wrong password!"));
       const { rowCount } = await db.query(
-        "select * from staff join department on department.hod_id = staff.staffId where staffId=$1",
+        "SELECT * FROM staff JOIN department ON department.hod_id = staff.staffId WHERE staffId=$1",
         [staffId]
       );
       let isHod = false;
@@ -52,7 +52,6 @@ export async function staffSignInController(req, res, next) {
       const { password: hashedPassword, ...data } = response.rows[0];
       const token = createJWT({ staffId });
       res.status(200).json({ data, token, isHod, success: true });
-      console.log("here");
     }
   } catch (error) {
     next(error);

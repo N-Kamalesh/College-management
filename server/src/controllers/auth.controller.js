@@ -6,7 +6,7 @@ import { createJWT } from "../utils/jwt.js";
 export async function adminSignInController(req, res, next) {
   const { email, password } = req.body;
   try {
-    const response = await db.query("SELECT  FROM admin WHERE email=$1", [
+    const response = await db.query("SELECT * FROM admin WHERE email=$1", [
       email,
     ]);
     if (!response.rowCount) {

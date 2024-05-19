@@ -34,6 +34,8 @@ export default function StudentMarks(props) {
       async function getStudentMarks(){
         try {
           const response = await axios.get(`${VITE_BASE_URL}/staff/courses/student?roll=${studentInfo.rollno}&cid=${studentInfo.courseid}&sem=${studentInfo.sem}&year=${studentInfo.year}`);
+
+          if(!response.data.data) throw 'Roll no Not in this course!';
           setInputAttendance(response.data.data.attendance);
           setInputInternals(response.data.data.internals);
           setInputExternals(response.data.data.externals);
@@ -41,6 +43,20 @@ export default function StudentMarks(props) {
           setMarks(response.data.data)
         } catch (error) {
           console.error(error);
+          setInputAttendance(0);
+          setInputInternals(0);
+          setInputExternals(0);
+
+          setMarks(
+            {
+              "courseid": "Not Valid",
+              "attendance": 0,
+              "sem": 0,
+              "internals": 0,
+              "externals": 0,
+              "coursename": "Not Valid",
+            }
+          );
         }
       }
       getStudentMarks();
@@ -90,7 +106,8 @@ export default function StudentMarks(props) {
       try {
         const response = await axios.patch(`${VITE_BASE_URL}/staff/courses/student`, finalObject);
         const saveButton = document.getElementById("saveButton");
-        saveButton.style.backgroundColor = '#AAFF00';
+        marks.courseid === "Not Valid" ? saveButton.style.backgroundColor = '#D2042D' : saveButton.style.backgroundColor = '#AAFF00';
+        history.back();
       } catch (error) {
         console.log(error);
       }
@@ -133,7 +150,7 @@ export default function StudentMarks(props) {
             <tbody className="text-black text-centre">
               <tr className="bg-cyan-900  hover:bg-cyan-100 cursor-pointer duration-300">
                 <td className="py-2 px-6">{marks.rollno}</td>
-                <td className="py-2 px-6">{studentInfo.fullname}</td>
+                <td className="py-2 px-6">{marks.courseid === "Not Valid" ? "Not Valid" : studentInfo.fullname}</td>
                 <td className="py-2 px-6" ><input onChange={handleInputChange} className="bg-cyan-900  hover:bg-cyan-100 cursor-pointer duration-300 text-center rounded-md p-3" type="text" value={inputAttendance || ''} id="attendance" /></td>
                 <td className="py-2 px-6" ><input onChange={handleInputChange} className="bg-cyan-900  hover:bg-cyan-100 cursor-pointer duration-300 text-center rounded-md p-3" type="text" value={inputInternals  || ''} id="internals" /></td>
                 <td className="py-2 px-6" ><input onChange={handleInputChange} className="bg-cyan-900  hover:bg-cyan-100 cursor-pointer duration-300 text-center rounded-md p-3" type="text" value={inputExternals  || ''} id="externals"/></td>

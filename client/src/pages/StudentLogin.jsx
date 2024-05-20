@@ -55,7 +55,6 @@ function StudentLogin() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log("Form submitted");
     setErrMsg("");
     if (!password.trim() || !rollno.trim()) {
       setErrMsg("Please fill all fields!");
@@ -86,10 +85,8 @@ function StudentLogin() {
         `${VITE_BASE_URL}/auth/student/signin`,
         formData
       );
-      console.log(response.data);
       if (response.data.success) {
         dispatch(studentLoginSuccess(response.data.data, response.data.token));
-        console.log("Success");
       } else {
         setErrMsg(response.data.message);
         changeCaptcha();

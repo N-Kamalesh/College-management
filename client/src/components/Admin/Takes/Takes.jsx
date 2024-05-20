@@ -77,7 +77,6 @@ function Takes() {
           },
         }
       );
-      console.log(response);
       if (response.data.success) {
         console.log(response.data.message);
         setMode("list");
@@ -116,7 +115,6 @@ function Takes() {
             },
           }
         );
-        console.log(response);
         if (response.data.success) {
           console.log(response.data.message);
           setMode("list");
@@ -154,7 +152,6 @@ function Takes() {
           },
         }
       );
-      console.log(response);
       if (response.data.success) {
         console.log(response.data.message);
         setMode("list");
@@ -182,10 +179,8 @@ function Takes() {
               Authorization: `Bearer ${token}`,
             },
           });
-          console.log(response);
           if (response.data.success) {
             setTakess(response.data.data);
-            console.log("Fetching Success");
           } else {
             setError(response.data.message);
           }

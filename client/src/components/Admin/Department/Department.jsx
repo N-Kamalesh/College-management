@@ -49,7 +49,6 @@ function Department() {
           },
         }
       );
-      console.log(response);
       if (response.data.success) {
         console.log(response.data.message);
         setMode("list");
@@ -83,7 +82,6 @@ function Department() {
           },
         }
       );
-      console.log(response);
       if (response.data.success) {
         console.log(response.data.message);
         setMode("list");
@@ -114,10 +112,8 @@ function Department() {
               },
             }
           );
-          console.log(response);
           if (response.data.success) {
             setDepartments(response.data.data);
-            console.log("Fetching Success");
           } else {
             setError(response.data.message);
           }

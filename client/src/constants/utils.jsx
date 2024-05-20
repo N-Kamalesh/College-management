@@ -68,7 +68,6 @@ export function getCgpa(marks) {
         total += mark.credits;
         break;
       default:
-        console.log(mark);
         return "NA";
     }
   });

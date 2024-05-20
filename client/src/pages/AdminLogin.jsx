@@ -54,7 +54,6 @@ function AdminLogin() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log("Form submitted");
     setErrMsg("");
     if (!password.trim() || !email.trim()) {
       setErrMsg("Please fill all fields!");
@@ -83,10 +82,8 @@ function AdminLogin() {
         `${VITE_BASE_URL}/auth/admin/signin`,
         formData
       );
-      console.log(response.data);
       if (response.data.success) {
         dispatch(adminLoginSuccess(response.data.data, response.data.token));
-        console.log("Success");
       } else {
         setErrMsg(response.data.message);
         changeCaptcha();

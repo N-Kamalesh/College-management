@@ -66,7 +66,6 @@ function Announcement() {
           },
         }
       );
-      console.log(response);
       if (response.data.success) {
         console.log(response.data.message);
         setMode("list");
@@ -104,7 +103,6 @@ function Announcement() {
             },
           }
         );
-        console.log(response);
         if (response.data.success) {
           console.log(response.data.message);
           setMode("list");
@@ -141,7 +139,6 @@ function Announcement() {
           },
         }
       );
-      console.log(response);
       if (response.data.success) {
         console.log(response.data.message);
         setMode("list");
@@ -172,10 +169,8 @@ function Announcement() {
               },
             }
           );
-          console.log(response);
           if (response.data.success) {
             setAnnouncements(response.data.data);
-            console.log("Fetching Success");
           } else {
             setError(response.data.message);
           }

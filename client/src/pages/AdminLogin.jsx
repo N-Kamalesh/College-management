@@ -21,9 +21,9 @@ function AdminLogin() {
   const [captcha, setCaptcha] = useState(() =>
     cryptoRandomString({ length: 6, type: "base64" })
   );
-  const [matchCaptcha, setMatchCaptcha] = useState(() => captcha);
-  const [email, setEmail] = useState("admin@gmail.com");
-  const [password, setPassword] = useState("Admin@1234");
+  const [matchCaptcha, setMatchCaptcha] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
@@ -103,7 +103,7 @@ function AdminLogin() {
   }
 
   return (
-    <main className="min-h-screen bg-cover bg-blue bg-top h-full  flex flex-col ">
+    <main className="min-h-screen bg-cover body bg-top h-full  flex flex-col ">
       <PageNav />
       <motion.h1
         initial={{

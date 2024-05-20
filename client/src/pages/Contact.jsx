@@ -10,7 +10,7 @@ import Footer from "../components/Footer";
 function Contact() {
   const position = [13.011, 80.2354];
   return (
-    <main className="bg-circ bg-cover min-h-screen flex flex-col">
+    <main className="body bg-cover min-h-screen flex flex-col">
       <PageNav />
       <section className="flex flex-col md:flex-row mt-12 max-w-7xl w-full mx-auto justify-around items-center">
         <motion.img

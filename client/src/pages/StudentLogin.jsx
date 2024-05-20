@@ -105,7 +105,7 @@ function StudentLogin() {
   }
 
   return (
-    <main className="min-h-screen bg-cover bg-blue bg-top h-full  flex flex-col ">
+    <main className="min-h-screen bg-cover body bg-top h-full  flex flex-col ">
       <PageNav />
       <motion.h1
         initial={{

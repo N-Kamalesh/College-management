@@ -3,7 +3,7 @@ import {
   getCourses,
   getStudents,
   newView,
-  getALLStudents,
+  getAllStudents,
   getMarksAttendance,
   updateMarks,
   getStudentInfo,
@@ -16,14 +16,13 @@ import { getAnnouncements } from "../controllers/student.controller.js";
 
 const staffRouter = express.Router();
 
-staffRouter.get("/courses/course", getCourses);
-staffRouter.get("/courses/create", newView);
-staffRouter.get("/courses/", getStudents);
-staffRouter.get("/courses/all", getALLStudents);
-staffRouter.get("/courses/student", getMarksAttendance);
-staffRouter.patch("/courses/student", updateMarks);
-staffRouter.get("/courses/student/name", getStudentInfo);
-// staffRouter.get("/:id", getStaffData);
+staffRouter.get("/courses/course", verifyJWT, getCourses);
+staffRouter.get("/courses/create", verifyJWT, newView);
+staffRouter.get("/courses/", verifyJWT, getStudents);
+staffRouter.get("/courses/all", verifyJWT, getAllStudents);
+staffRouter.get("/courses/student", verifyJWT, getMarksAttendance);
+staffRouter.patch("/courses/student", verifyJWT, updateMarks);
+staffRouter.get("/courses/student/name", verifyJWT, getStudentInfo);
 staffRouter.get("/announcement/:id", verifyJWT, getAnnouncements);
 staffRouter.post("/announcement/add", verifyJWT, addAnnouncement);
 staffRouter.delete("/announcement/:id", verifyJWT, deleteAnnouncement);

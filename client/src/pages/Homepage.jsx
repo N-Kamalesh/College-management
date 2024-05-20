@@ -15,7 +15,7 @@ function Homepage() {
   const slides = [img1, img2, img3, img4];
 
   return (
-    <main className="bg-ball min-h-screen  bg-cover flex flex-col ">
+    <main className="body  min-h-screen  bg-cover flex flex-col ">
       <PageNav />
       <section className=" w-full sm:w-4/5 mx-auto mt-0 sm:mt-12 mb-10 sm:mb-14 max-w-4xl">
         <Carousel slides={slides} />

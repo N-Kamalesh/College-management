@@ -108,7 +108,7 @@ function StaffLogin() {
   }
 
   return (
-    <main className="min-h-screen bg-cover bg-blue bg-top h-full  flex flex-col ">
+    <main className="min-h-screen bg-cover body bg-top h-full  flex flex-col ">
       <PageNav />
       <motion.h1
         initial={{
@@ -168,7 +168,7 @@ function StaffLogin() {
           y: "1000px",
         }}
         onSubmit={handleSubmit}
-        className="flex flex-col p-8 max-w-lg mx-auto break-all gap-4 rounded-3xl border-2 border-[#ffffff80] border-r-[#ffffff33] border-b-[#ffffff33] backdrop-blur-lg bg-white/[0.2] shadow-[3px_3px_5px_#ffffff0f] w-[90%] "
+        className="flex flex-col p-8 max-w-lg mx-auto break-all gap-4 rounded-3xl border-2 border-[#ffffff80] border-r-[#ffffff33] border-b-[#ffffff33] backdrop-blur-lg bg-white/[0.2]  w-[90%] "
       >
         <input
           className="w-full mx-auto py-2 px-4 rounded-3xl bg-transparent border border-[#ffffff80] border-r-[#ffffff33] border-b-[#ffffff33] focus:border focus:shadow-[0_5px_15px_#ffffff33] focus:outline-none text-white placeholder:text-white/[0.75]"

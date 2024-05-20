@@ -101,7 +101,6 @@ export async function addDepartment(req, res, next) {
 export async function updateDepartment(req, res, next) {
   const deptcode = req.params.id;
   const { deptname, hod_id, deptcode: newDeptcode } = req.body;
-  console.log(req.body);
   if (
     !deptname?.trim() ||
     !String(hod_id)?.trim() ||

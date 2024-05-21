@@ -71,7 +71,6 @@ function Student() {
           },
         }
       );
-      console.log(response);
       if (response.data.success) {
         console.log(response.data.message);
         setMode("list");
@@ -109,7 +108,6 @@ function Student() {
             },
           }
         );
-        console.log(response);
         if (response.data.success) {
           console.log(response.data.message);
           setMode("list");
@@ -146,7 +144,6 @@ function Student() {
           },
         }
       );
-      console.log(response);
       if (response.data.success) {
         console.log(response.data.message);
         setMode("list");
@@ -174,10 +171,8 @@ function Student() {
               Authorization: `Bearer ${token}`,
             },
           });
-          console.log(response);
           if (response.data.success) {
             setStudents(response.data.data);
-            console.log("Fetching Success");
           } else {
             setError(response.data.message);
           }

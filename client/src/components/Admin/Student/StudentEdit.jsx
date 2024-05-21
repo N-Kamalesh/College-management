@@ -61,7 +61,6 @@ function StudentEdit({ onSubmit, student, onBack }) {
         day = "0" + day;
       }
       var yyyy_mm_dd = year + "-" + month + "-" + day;
-      console.log(yyyy_mm_dd);
       setData((data) => ({ ...data, dob: yyyy_mm_dd }));
     },
     [data.dob]

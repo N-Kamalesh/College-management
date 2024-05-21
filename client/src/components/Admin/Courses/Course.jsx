@@ -71,7 +71,6 @@ function Course() {
           },
         }
       );
-      console.log(response);
       if (response.data.success) {
         console.log(response.data.message);
         setMode("list");
@@ -109,7 +108,6 @@ function Course() {
             },
           }
         );
-        console.log(response);
         if (response.data.success) {
           console.log(response.data.message);
           setMode("list");
@@ -146,7 +144,6 @@ function Course() {
           },
         }
       );
-      console.log(response);
       if (response.data.success) {
         console.log(response.data.message);
         setMode("list");
@@ -174,10 +171,8 @@ function Course() {
               Authorization: `Bearer ${token}`,
             },
           });
-          console.log(response);
           if (response.data.success) {
             setCourses(response.data.data);
-            console.log("Fetching Success");
           } else {
             setError(response.data.message);
           }

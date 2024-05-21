@@ -57,7 +57,6 @@ function StaffEdit({ onSubmit, staff, onBack }) {
         day = "0" + day;
       }
       var yyyy_mm_dd = year + "-" + month + "-" + day;
-      console.log(yyyy_mm_dd);
       setData((data) => ({ ...data, joindate: yyyy_mm_dd }));
     },
     [data.joindate]

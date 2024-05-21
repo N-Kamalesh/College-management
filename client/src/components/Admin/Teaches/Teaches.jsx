@@ -77,7 +77,6 @@ function Teaches() {
           },
         }
       );
-      console.log(response);
       if (response.data.success) {
         console.log(response.data.message);
         setMode("list");
@@ -116,7 +115,6 @@ function Teaches() {
             },
           }
         );
-        console.log(response);
         if (response.data.success) {
           console.log(response.data.message);
           setMode("list");
@@ -154,7 +152,6 @@ function Teaches() {
           },
         }
       );
-      console.log(response);
       if (response.data.success) {
         console.log(response.data.message);
         setMode("list");
@@ -182,10 +179,8 @@ function Teaches() {
               Authorization: `Bearer ${token}`,
             },
           });
-          console.log(response);
           if (response.data.success) {
-            setTeachess(response.data.data);
-            console.log("Fetching Success");
+            setTeachess(response.data.data);;
           } else {
             setError(response.data.message);
           }

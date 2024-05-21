@@ -57,7 +57,6 @@ function StaffLogin() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log("Form submitted");
     setErrMsg("");
     if (!password.trim() || !staffId.trim()) {
       setErrMsg("Please fill all fields!");
@@ -86,7 +85,6 @@ function StaffLogin() {
         `${VITE_BASE_URL}/auth/staff/signin`,
         formData
       );
-      console.log(response.data);
       if (response.data.success) {
         dispatch(
           staffLoginSuccess(
@@ -95,7 +93,6 @@ function StaffLogin() {
             response.data.isHod
           )
         );
-        console.log("Success");
       } else {
         setErrMsg(response.data.message);
         changeCaptcha();

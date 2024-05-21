@@ -1,13 +1,29 @@
 import db from "../config/db.js";
+import "dotenv/config";
 import { errorHandler } from "../utils/error.js";
 import crypto from "crypto";
 import bcryptjs from "bcryptjs";
+import nodemailer from 'nodemailer';
 
 const EMAIL_REGEX = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
 const PWD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
 const MOB_REGEX = /^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$/;
 const RNO_REGEX = /^20[\d]{8}$/;
 const SID_REGEX = /^2[\d]{3}$/;
+
+let {MAIL_USER, MAIL_PASS} = process.env;
+const transporter  = nodemailer.createTransport(
+  {
+    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: true,
+    auth: {
+      user: MAIL_USER,
+      pass: MAIL_PASS,
+    },
+  }
+);
 
 export async function getAnnouncements(req, res, next) {
   try {
@@ -25,6 +41,25 @@ export async function addAnnouncement(req, res, next) {
   if (!title?.trim() || !content?.trim() || !String(deptcode).trim())
     return next(errorHandler(422, "Please provide all values properly"));
   const id = crypto.randomUUID();
+  
+  try {
+    const response = await db.query("SELECT email from students WHERE deptcode = $1;", [deptcode]);
+    response.rows.forEach(item => {
+    const mailOptions = {
+      from: {
+        name: 'College DB',
+        address: MAIL_PASS,
+      },
+      to: [item.email],
+      subject: 'New Announcement Alert!',
+      text: content.trim(),
+      html: `<h1>${title.trim()}</h1><pre>${content.trim()}</pre>`,
+    }
+    sendMail(transporter, mailOptions)
+    })
+  } catch (error) {
+    console.error(error);
+  }
   try {
     await db.query(
       "INSERT INTO announcements(announcement_id,title,content,deptcode) VALUES ($1,$2,$3,$4)",
@@ -706,3 +741,11 @@ export async function deleteTakes(req, res, next) {
   }
 }
 
+async function sendMail(transporter, mailOptions){
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log("Mail Sent");
+  } catch (error) {
+    console.log(error);
+  }
+}

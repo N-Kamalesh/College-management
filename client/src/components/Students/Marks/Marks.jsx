@@ -163,7 +163,7 @@ export default function Marks() {
       )}
       <p className="w-4/5 px-4 py-2 bg-indigo-800 text-white flex justify-between mx-auto mb-10">
         <span>Current CGPA</span>
-        <span>{getCgpa(marks).toFixed(2)}</span>
+        <span>{getCgpa(marks) === 'NA' ? 'NA': getCgpa(marks).toFixed(2)}</span>
       </p>
     </main>
   );

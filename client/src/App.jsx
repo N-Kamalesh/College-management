@@ -92,7 +92,7 @@ function App() {
             </Route>
           </Route>
           <Route path="/contact" element={<Contact />} />
-          <Route path="*" element={<PageNotFound />} />
+          <Route path="/*" element={<PageNotFound />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

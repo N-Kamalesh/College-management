@@ -181,7 +181,7 @@ function Dashboard() {
           It seems like you&apos;re not enrolled in any courses currently
         </p>
       ) : (
-        <div className=" m-10 flex shrink-0 h-auto py-4 px-4 overflow-x-auto justify-evenly">
+        <div className="w-[80vw] mx-auto m-10 flex shrink-0 h-auto p-4  overflow-x-auto justify-evenly">
           {courseInstructors.map((item, index) => (
             <FlipCard
               key={index}

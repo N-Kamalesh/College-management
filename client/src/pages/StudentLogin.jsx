@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleExclamation,
+  faEye,
+  faEyeSlash,
   faRepeat,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
@@ -27,7 +29,7 @@ function StudentLogin() {
   const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
+  const [isVisible, setIsVisible] = useState(true);
   const dispatch = useDispatch();
   const { isAuthenticated, role } = useSelector((state) => state.user);
 
@@ -177,15 +179,27 @@ function StudentLogin() {
           value={rollno}
           onChange={(e) => setRollno(e.target.value)}
         />
-        <input
-          className="w-full mx-auto py-2 px-4 rounded-3xl bg-transparent border border-[#ffffff80] border-r-[#ffffff33] border-b-[#ffffff33] focus:border focus:shadow-[0_5px_15px_#ffffff33] focus:outline-none text-white placeholder:text-white/[0.75]"
-          type="password"
-          name="password"
-          placeholder="Password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <div className="relative">
+          <input
+            className="w-full mx-auto py-2 px-4 rounded-3xl bg-transparent border border-[#ffffff80] border-r-[#ffffff33] border-b-[#ffffff33] focus:border focus:shadow-[0_5px_15px_#ffffff33] focus:outline-none text-white placeholder:text-white/[0.75]"
+            type={isVisible ? "password" : "text"}
+            name="password"
+            placeholder="Password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <span
+            className="absolute right-4 top-2 cursor-pointer text-white"
+            onClick={() => setIsVisible(!isVisible)}
+          >
+            {isVisible ? (
+              <FontAwesomeIcon icon={faEye} />
+            ) : (
+              <FontAwesomeIcon icon={faEyeSlash} />
+            )}
+          </span>
+        </div>
         <div className="w-full mx-auto py-2 px-4 rounded-3xl bg-transparent border border-[#ffffff80] border-r-[#ffffff33] border-b-[#ffffff33] focus:border focus:shadow-[0_5px_15px_#ffffff33] focus:outline-none text-white placeholder:text-white/[0.75]  text-center  tracking-widest text-xl relative">
           <p className="cursor-not-allowed unselectable font-cursive line-through">
             {captcha}

@@ -14,7 +14,7 @@ export default function Marks() {
   const [error, setError] = useState("");
   const { user, token } = useSelector((state) => state.user);
   const [sortBy, setSortBy] = useState("all");
-
+  const cgpa = getCgpa(marks);
   const sems = createArray(marks);
 
   const sortedMarks =
@@ -165,7 +165,7 @@ export default function Marks() {
       )}
       <p className="w-4/5 px-4 py-2 bg-indigo-800 text-white flex justify-between mx-auto mb-10">
         <span>Current CGPA</span>
-        <span>{getCgpa(marks).toFixed(2)}</span>
+        <span>{cgpa === "NA" ? "NA" : cgpa.toFixed(2)}</span>
       </p>
     </main>
   );

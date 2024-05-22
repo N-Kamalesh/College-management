@@ -15,7 +15,7 @@ function CourseItem({
   handleClick,
 }) {
   return (
-    <div className="rounded-md border-2 bg-gray-200 p-4 w-4/5 flex flex-col md:flex-row justify-between items-center">
+    <div className="rounded-md border-2 bg-gray-200 p-4 w-4/5 flex flex-col md:flex-row justify-between items-center hover:scale-105 transition-all">
       <div
         className="w-full text-center md:text-left cursor-pointer"
         onClick={() => handleClick(course.courseid)}

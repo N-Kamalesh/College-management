@@ -66,6 +66,7 @@ function Takes() {
   }
 
   async function handleAdd(data) {
+    setError("");
     try {
       setIsLoading(true);
       const response = await axios.post(
@@ -104,6 +105,7 @@ function Takes() {
 
   async function handleDelete(res) {
     if (res) {
+      setError("");
       try {
         const id = JSON.stringify(selectedId);
         setIsLoading(true);
@@ -140,6 +142,7 @@ function Takes() {
   }
 
   async function handleEdit(data) {
+    setError("");
     try {
       setIsLoading(true);
       const id = JSON.stringify(selectedId);
@@ -155,6 +158,7 @@ function Takes() {
       if (response.data.success) {
         console.log(response.data.message);
         setMode("list");
+        setSelectedId(null);
       } else {
         setError(response.data.message);
       }
@@ -166,7 +170,6 @@ function Takes() {
     } finally {
       setIsLoading(false);
     }
-    setSelectedId(null);
   }
 
   useEffect(

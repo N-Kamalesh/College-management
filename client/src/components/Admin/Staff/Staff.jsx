@@ -60,6 +60,7 @@ function Staff() {
   }
 
   async function handleAdd(data) {
+    setError("");
     try {
       setIsLoading(true);
       const response = await axios.post(
@@ -98,6 +99,7 @@ function Staff() {
 
   async function handleDelete(res) {
     if (res) {
+      setError("");
       try {
         setIsLoading(true);
         const response = await axios.delete(
@@ -133,6 +135,7 @@ function Staff() {
   }
 
   async function handleEdit(data) {
+    setError("");
     try {
       setIsLoading(true);
       const response = await axios.put(
@@ -147,6 +150,7 @@ function Staff() {
       if (response.data.success) {
         console.log(response.data.message);
         setMode("list");
+        setSelectedId(null);
       } else {
         setError(response.data.message);
       }
@@ -158,7 +162,6 @@ function Staff() {
     } finally {
       setIsLoading(false);
     }
-    setSelectedId(null);
   }
 
   useEffect(

@@ -56,6 +56,7 @@ function Announcement() {
 
   async function handleAdd(data) {
     const formData = { ...data, deptcode: user.deptcode };
+    setError("");
     try {
       setIsLoading(true);
       const response = await axios.post(
@@ -94,6 +95,7 @@ function Announcement() {
 
   async function handleDelete(res) {
     if (res) {
+      setError("");
       try {
         setIsLoading(true);
         const response = await axios.delete(
@@ -130,6 +132,7 @@ function Announcement() {
 
   async function handleEdit(data) {
     const formData = { ...data, deptcode: user.deptcode };
+    setError("");
     try {
       setIsLoading(true);
       const response = await axios.put(
@@ -144,6 +147,7 @@ function Announcement() {
       if (response.data.success) {
         console.log(response.data.message);
         setMode("list");
+        setSelectedId(null);
       } else {
         setError(response.data.message);
       }
@@ -155,7 +159,6 @@ function Announcement() {
     } finally {
       setIsLoading(false);
     }
-    setSelectedId(null);
   }
 
   useEffect(
